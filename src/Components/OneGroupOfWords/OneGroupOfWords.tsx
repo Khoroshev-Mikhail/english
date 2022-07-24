@@ -1,8 +1,15 @@
+import { Link, Outlet } from 'react-router-dom' 
+import './oneGroupOfWords.css'
+
 export default function OneGroupOfWords(props: any){
     return (
-        <>
-            OneGroupOfWords
-            <h1><a>{props.title}</a></h1>
-        </>
+        <div className="OneGroupOfWords">
+            <h1>Вы выбрали группу слов {props.title}</h1>
+            <p><Link to="rus-eng">Русский - Английский</Link></p>
+            <p><Link to="rus-eng">Английский - Русский</Link></p>
+            <p>Собери последовательность букв</p>
+            <p>Аудирование</p>
+            <Outlet />
+        </div>
     )
 }
