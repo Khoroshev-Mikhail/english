@@ -5,12 +5,12 @@ export default function GroupsOfWords(){
         <div className="GroupsOfWords">
                     <Link to={'/nouns'}>
                         <div className="GroupsOfWords__oneGroupOfWord">
-                            15 Nouns
+                            10 Nouns
                         </div>
                     </Link>
                     <Link to={'/adjectives'}> 
                         <div className="GroupsOfWords__oneGroupOfWord">
-                            15 Adjectives
+                            10 Adjectives
                         </div>
                     </Link>
         </div>

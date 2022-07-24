@@ -4,13 +4,14 @@ import { Routes, Route } from "react-router-dom";
 import './main.css'
 import Header from "../Header/Header";
 import RusEng from "../RusEng/RusEng";
+
 const user = {
     id: 1,
     name: 'Mike',
-    vocabulary: {
-        nouns: {
-        }
-    }
+}
+const vocabulary = {
+    nouns: [0, 1, 2], //(id выученных слов) Надо уточнить формат данных в БД
+    adjectives: [0, 1, 2]
 }
 const nouns = [
     {id: 0, noun0: 'существительное0'},
