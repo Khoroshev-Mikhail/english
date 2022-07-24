@@ -1,9 +1,9 @@
-import Main from "./Components/Main/Main";
+import MainWrapper from "./Components/Main/MainWrapper";
 
 function App() {
   return (
     <div>
-      <Main />
+      <MainWrapper />
     </div>
   );
 }

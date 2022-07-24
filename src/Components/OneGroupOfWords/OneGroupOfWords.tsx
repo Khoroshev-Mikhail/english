@@ -9,7 +9,6 @@ export default function OneGroupOfWords(props: any){
             <p>Английский - Русский</p>
             <p>Собери последовательность букв</p>
             <p>Аудирование</p>
-            <Outlet />
         </div>
     )
 }
