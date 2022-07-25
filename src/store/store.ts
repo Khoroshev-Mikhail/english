@@ -43,7 +43,7 @@ const vocabularRusEng = {
     adjectives: [0, 1, 2],
 }
 export const vocabularRusEngSlice = createSlice({
-    name: 'vocabulary',
+    name: 'vocabularyRusEng',
     initialState: vocabularRusEng,
     reducers: {
         setNounsToVocabularRusEng: (state, action) => ({...state, nouns: [...state.nouns, action.payload]}),
@@ -58,7 +58,7 @@ const vocabularEngRus = {
     adjectives: [0, 1, 2],
 }
 export const vocabularEngRusSlice = createSlice({
-    name: 'vocabulary',
+    name: 'vocabularyEngRus',
     initialState: vocabularEngRus,
     reducers: {
         setNounsToVocabularEngRus: (state, action) => ({...state, nouns: [...state.nouns, action.payload]}),
@@ -67,11 +67,27 @@ export const vocabularEngRusSlice = createSlice({
 })
 export const {setNounsToVocabularEngRus, setAdjectivesToVocabularEngRus} = vocabularEngRusSlice.actions
 
+//Spell
+const vocabularSpell = {
+    nouns: [0, 1, 2],
+    adjectives: [0, 1, 2],
+}
+export const vocabularSpellSlice = createSlice({
+    name: 'Spell',
+    initialState: vocabularSpell,
+    reducers: {
+        setNounsToVocabularSpell: (state, action) => ({...state, nouns: [...state.nouns, action.payload]}),
+        setAdjectivesToVocabularSpell: (state, action) => ({...state, adjectives: [...state.adjectives, action.payload]})
+    }
+})
+export const { setNounsToVocabularSpell, setAdjectivesToVocabularSpell } = vocabularSpellSlice.actions
+
 
 export const store = configureStore({
     reducer: {
         vocabularRusEng: vocabularRusEngSlice.reducer,
-        vocabularEngRus: vocabularEngRusSlice.reducer
+        vocabularEngRus: vocabularEngRusSlice.reducer,
+        vocabularSpell: vocabularSpellSlice.reducer
     }
 })
 export type RootState = ReturnType<typeof store.getState>

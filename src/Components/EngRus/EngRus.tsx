@@ -27,8 +27,6 @@ export default function EngRus(props: RusEngProps){
                         )
                 })}
             </div>
-
-            
         </div>
     )
 }
