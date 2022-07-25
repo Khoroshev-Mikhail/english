@@ -1,0 +1,25 @@
+.RusEng{
+    width: 100%;
+    margin: 0px auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.RusEng h1{
+    text-align: center;
+}
+.RusEng__Variants {
+    display: flex;
+    flex-direction: column;
+}
+.RusEng__Variants__Variant{
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 200px;
+    min-width: 100px;
+    margin: 5px auto;
+    background-color: rgb(36, 145, 60);
+    cursor: pointer;
+}

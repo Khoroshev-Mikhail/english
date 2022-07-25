@@ -1,15 +1,19 @@
 import { connect } from "react-redux";
-import { AppDispatch, RootState, setNounsToVocabular } from "../../store/store";
+import { AppDispatch, RootState, setAdjectivesToVocabularEngRus, setAdjectivesToVocabularRusEng, setNounsToVocabularEngRus, setNounsToVocabularRusEng } from "../../store/store";
 import Main from "./Main";
 
 function mapStateToProps(state: RootState){
     return {
-        vocabular: state.vocabular
+        vocabularRusEng: state.vocabularRusEng,
+        vocabularEngRus: state.vocabularEngRus,
     }
 }
 function mapDispatchToProps(dispatch: AppDispatch){
     return {
-        setNounsToVocabular: (id: number) => dispatch(setNounsToVocabular(id))
+        setNounsToVocabularRusEng: (id: number) => dispatch(setNounsToVocabularRusEng(id)),
+        setAdjectivesToVocabularRusEng: (id: number) => dispatch(setAdjectivesToVocabularRusEng(id)),
+        setNounsToVocabularEngRus: (id: number) => dispatch(setNounsToVocabularEngRus(id)),
+        setAdjectivesToVocabularEngRus: (id: number) => dispatch(setAdjectivesToVocabularEngRus(id)),
     }
 }
 

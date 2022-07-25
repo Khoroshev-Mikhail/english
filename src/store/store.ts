@@ -2,8 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-
-export const nouns = [
+export type Word = {
+    id: number,
+    eng: string,
+    rus: string,
+}
+export type Vocabular = Word[]
+export const nouns: Vocabular = [
     {id: 0, eng: 'noun0', rus: 'существительное0'},
     {id: 1, eng: 'noun1', rus: 'существительное1'},
     {id: 2, eng: 'noun2', rus: 'существительное2'},
@@ -15,7 +20,7 @@ export const nouns = [
     {id: 8, eng: 'noun8', rus: 'существительное8'},
     {id: 9, eng: 'noun9', rus: 'существительное9'},
 ]
-export const adjectives = [
+export const adjectives: Vocabular = [
     {id: 0, eng: 'adjective0', rus: 'прилагательное0'},
     {id: 1, eng: 'adjective1', rus: 'прилагательное1'},
     {id: 2, eng: 'adjective2', rus: 'прилагательное2'},
@@ -27,31 +32,46 @@ export const adjectives = [
     {id: 8, eng: 'adjective8', rus: 'прилагательное8'},
     {id: 9, eng: 'adjective9', rus: 'прилагательное9'},
 ]
-
 export const user = {
     id: 1,
     name: 'Mike',
 }
+
+//Rus-Eng
 const vocabularRusEng = {
     nouns: [0, 1, 2],
     adjectives: [0, 1, 2],
 }
-
-export const vocabularSlice = createSlice({
+export const vocabularRusEngSlice = createSlice({
     name: 'vocabulary',
     initialState: vocabularRusEng,
     reducers: {
-        setNounsToVocabular: (state, action) => ({...state, nouns: [...state.nouns, action.payload.id]}),
-        setAdjectivesToVocabular: (state, action) => ({...state, nouns: [...state.nouns, action.payload.id]})
+        setNounsToVocabularRusEng: (state, action) => ({...state, nouns: [...state.nouns, action.payload]}),
+        setAdjectivesToVocabularRusEng: (state, action) => ({...state, adjectives: [...state.adjectives, action.payload]})
     }
 })
-export const {setNounsToVocabular, setAdjectivesToVocabular} = vocabularSlice.actions
+export const {setNounsToVocabularRusEng, setAdjectivesToVocabularRusEng} = vocabularRusEngSlice.actions
 
+//Eng-Rus
+const vocabularEngRus = {
+    nouns: [0, 1, 2],
+    adjectives: [0, 1, 2],
+}
+export const vocabularEngRusSlice = createSlice({
+    name: 'vocabulary',
+    initialState: vocabularEngRus,
+    reducers: {
+        setNounsToVocabularEngRus: (state, action) => ({...state, nouns: [...state.nouns, action.payload]}),
+        setAdjectivesToVocabularEngRus: (state, action) => ({...state, adjectives: [...state.adjectives, action.payload]})
+    }
+})
+export const {setNounsToVocabularEngRus, setAdjectivesToVocabularEngRus} = vocabularEngRusSlice.actions
 
 
 export const store = configureStore({
     reducer: {
-        vocabular: vocabularSlice.reducer
+        vocabularRusEng: vocabularRusEngSlice.reducer,
+        vocabularEngRus: vocabularEngRusSlice.reducer
     }
 })
 export type RootState = ReturnType<typeof store.getState>
