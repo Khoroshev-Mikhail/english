@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-
 export const nouns = [
     {id: 0, noun0: 'существительное0'},
     {id: 1, noun1: 'существительное1'},
