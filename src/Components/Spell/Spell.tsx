@@ -5,10 +5,10 @@ import { PropsForLerning } from "../Main/Main"
 import './Spell.css'
 
 export default function Spell(props: PropsForLerning){
-    //Render на каждый клик
     const [random, setRandom] = useState<Word>(unlerned(props.vocabular, props.lerned))
     const [answer, setAnswer] = useState<string>('')
     const [display, setDisplay] = useState<string[]>([])
+    console.log(props.lerned)
     function tryIt(e: any){
         setDisplay(arr => arr.concat(e.target.id))
         setAnswer(res => res + e.target.value)
@@ -26,7 +26,6 @@ export default function Spell(props: PropsForLerning){
     return(
         <div className="Spell">
             <div className="Spell__answerString"> {answer.split('').map((el, i) =>{
-                const id:string = el + i
                 return (
                     <button key={i+100}>
                         {el}
@@ -34,9 +33,8 @@ export default function Spell(props: PropsForLerning){
                     )
             })} </div>
             {random.eng.split('').map((el, i) => {
-                const id:string = el + i
                 return (
-                    <button id={id} key={i} value={el} onClick={tryIt} style={{display: display.includes(id) ? 'none' : 'inline'}}>
+                    <button key={i} value={el} onClick={tryIt} style={{display: false ? 'none' : 'inline'}}>
                         {el}
                     </button>
                 )

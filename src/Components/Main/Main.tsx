@@ -21,7 +21,7 @@ export default function Main(props:any){
                 <Header />
                 <Routes>
                     <Route path="/" element={<GroupsOfWords russian={props.vocabularRussian} english={props.vocabularEnglish} spell={props.vocabularRussian}/>} />
-                    <Route path="nouns" element={<OneGroupOfWords title={'Топ-100 существительных'} russian={props.vocabularRussian.nouns} english={props.vocabularEnglish.nouns} spell={props.vocabularRussian.nouns} max={nouns.length}/>} />
+                    <Route path="nouns" element={<OneGroupOfWords title={'Топ-100 существительных'} russian={props.vocabularRussian.nouns} english={props.vocabularEnglish.nouns} spell={props.vocabularSpell.nouns} max={nouns.length}/>} />
                     <Route path="/nouns/rus-eng" element={<RusEng vocabular={nouns} lerned={props.vocabularRussian.nouns} setLerned={props.setNounsToVocabularRussian}/>} />
                     <Route path="/nouns/eng-rus" element={<EngRus vocabular={nouns} lerned={props.vocabularEnglish.nouns} setLerned={props.setNounsToVocabularEnglish}/>} />
                     <Route path="/nouns/spell" element={<Spell vocabular={nouns} lerned={props.vocabularSpell.nouns} setLerned={props.setNounsToVocabularSpell}/>} />
