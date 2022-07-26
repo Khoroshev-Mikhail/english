@@ -20,7 +20,9 @@ export default function Spell(props: PropsForLerning){
             setRandom(unlerned(props.vocabular, props.lerned))
         }
     },[answer])
-    
+    /*
+        Добавить функцию по клику на буквы в ответе
+    */
     return(
         <div className="Spell">
             <div className="Spell__answerString"> {answer.split('').map((el, i) =>{
