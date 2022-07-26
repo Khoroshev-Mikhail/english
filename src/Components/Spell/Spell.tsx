@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react"
 import { unlerned } from "../../store/myFns"
-import { Vocabular } from "../../store/store"
+import { PropsForLerning } from "../Main/Main"
 
-type SpellProps = {
-    lerned: number[],
-    vocabular: Vocabular,
-    setLerned: (id: number) => void,
-}
-export default function Spell(props: SpellProps){
+export default function Spell(props: PropsForLerning){
     //Render на каждый клик
     const random = unlerned(props.vocabular, props.lerned).eng //Одна строка из БД с данными по слову которого нет в словаре пользователя (объект)
     const [answer, setAnswer] = useState('')

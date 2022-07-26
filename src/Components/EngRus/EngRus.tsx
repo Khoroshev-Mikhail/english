@@ -1,12 +1,7 @@
 import { falseVariantsArray, unlerned } from "../../store/myFns"
-import { Vocabular } from "../../store/store"
+import { PropsForLerning } from "../Main/Main"
 
-type RusEngProps = {
-    lerned: number[],
-    vocabular: Vocabular,
-    setLerned: (id: number) => void,
-}
-export default function EngRus(props: RusEngProps){
+export default function EngRus(props: PropsForLerning){
     const random = unlerned(props.vocabular, props.lerned) //Одна строка из БД с данными по слову которого нет в словаре пользователя (объект)
     if(!random){
         return <h1>Congrats! Все слова изучены!</h1>

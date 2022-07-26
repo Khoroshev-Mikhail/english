@@ -1,20 +1,21 @@
 import { connect } from "react-redux";
-import { AppDispatch, RootState, setAdjectivesToVocabularEngRus, setAdjectivesToVocabularRusEng, setAdjectivesToVocabularSpell, setNounsToVocabularEngRus, setNounsToVocabularRusEng, setNounsToVocabularSpell } from "../../store/store";
+import { AppDispatch, RootState, setAdjectivesToVocabularEnglish, setAdjectivesToVocabularRussian, setAdjectivesToVocabularSpell, setNounsToVocabularEnglish, setNounsToVocabularRussian, setNounsToVocabularSpell } from "../../store/store";
 import Main from "./Main";
 
 function mapStateToProps(state: RootState){
     return {
-        vocabularRusEng: state.vocabularRusEng,
-        vocabularEngRus: state.vocabularEngRus,
+        vocabularRussian: state.vocabularRussian,
+        vocabularEnglish: state.vocabularEnglish,
         vocabularSpell: state.vocabularSpell,
     }
 }
+//Дублирование кода
 function mapDispatchToProps(dispatch: AppDispatch){
     return {
-        setNounsToVocabularRusEng: (id: number) => dispatch(setNounsToVocabularRusEng(id)),
-        setAdjectivesToVocabularRusEng: (id: number) => dispatch(setAdjectivesToVocabularRusEng(id)),
-        setNounsToVocabularEngRus: (id: number) => dispatch(setNounsToVocabularEngRus(id)),
-        setAdjectivesToVocabularEngRus: (id: number) => dispatch(setAdjectivesToVocabularEngRus(id)),
+        setNounsToVocabularRussian: (id: number) => dispatch(setNounsToVocabularRussian(id)),
+        setAdjectivesToVocabularRussian: (id: number) => dispatch(setAdjectivesToVocabularRussian(id)),
+        setNounsToVocabularEnglish: (id: number) => dispatch(setNounsToVocabularEnglish(id)),
+        setAdjectivesToVocabularEnglish: (id: number) => dispatch(setAdjectivesToVocabularEnglish(id)),
         setNounsToVocabularSpell: (id: number) => dispatch(setNounsToVocabularSpell(id)),
         setAdjectivesToVocabularSpell: (id: number) => dispatch(setAdjectivesToVocabularSpell(id)),
     }

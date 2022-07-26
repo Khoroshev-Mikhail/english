@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom' 
 import './oneGroupOfWords.css'
 
-export default function OneGroupOfWords(props: any){
+export default function OneGroupOfWords(props: { title: string }){
     return (
         <div className="OneGroupOfWords">
             <h1>{props.title}</h1>

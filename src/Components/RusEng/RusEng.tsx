@@ -1,19 +1,14 @@
 import { falseVariantsArray, unlerned } from "../../store/myFns"
-import { Vocabular } from "../../store/store"
+import { PropsForLerning } from "../Main/Main"
 import './RusEng.css'
 
-type RusEngProps = {
-    lerned: number[],
-    vocabular: Vocabular,
-    setLerned: (id: number) => void,
-}
-export default function RusEng(props: RusEngProps){
+
+export default function RusEng(props: PropsForLerning){
     const random = unlerned(props.vocabular, props.lerned) //Одна строка из БД с данными по слову которого нет в словаре пользователя (объект)
     if(!random){
         return <h1>Congrats! Все слова изучены!</h1>
     }
     const arr = falseVariantsArray(props.vocabular, random) //Массив с четыремя варианта ответа (один из них правильный)(массив объектов)
-    console.log(props.lerned)
     return (
         <div className="RusEng">  
             <h1>{random.rus}</h1>
@@ -29,8 +24,6 @@ export default function RusEng(props: RusEngProps){
                         )
                 })}
             </div>
-
-            
         </div>
     )
 }
