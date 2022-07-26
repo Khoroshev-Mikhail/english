@@ -20,13 +20,13 @@ export default function Main(props:any){
         <div className="main">
                 <Header />
                 <Routes>
-                    <Route path="/" element={<GroupsOfWords russian={props.vocabularRussian} english={props.vocabularEnglish} spell={props.vocabularSpell}/>} />
-                    <Route path="nouns" element={<OneGroupOfWords title={'nouns'} />} />
+                    <Route path="/" element={<GroupsOfWords russian={props.vocabularRussian} english={props.vocabularEnglish} spell={props.vocabularRussian}/>} />
+                    <Route path="nouns" element={<OneGroupOfWords title={'Топ-100 существительных'} russian={props.vocabularRussian.nouns} english={props.vocabularEnglish.nouns} spell={props.vocabularRussian.nouns} max={nouns.length}/>} />
                     <Route path="/nouns/rus-eng" element={<RusEng vocabular={nouns} lerned={props.vocabularRussian.nouns} setLerned={props.setNounsToVocabularRussian}/>} />
                     <Route path="/nouns/eng-rus" element={<EngRus vocabular={nouns} lerned={props.vocabularEnglish.nouns} setLerned={props.setNounsToVocabularEnglish}/>} />
                     <Route path="/nouns/spell" element={<Spell vocabular={nouns} lerned={props.vocabularSpell.nouns} setLerned={props.setNounsToVocabularSpell}/>} />
 
-                    <Route path="adjectives" element={<OneGroupOfWords title={'adjectives'}/>} />
+                    <Route path="adjectives" element={<OneGroupOfWords title={'Топ-100 прилагательных'} russian={props.vocabularRussian.adjectives} english={props.vocabularEnglish.adjectives} spell={props.vocabularRussian.adjectives} max={adjectives.length}/>} />
                     <Route path="/adjectives/rus-eng" element={<RusEng vocabular={adjectives} lerned={props.vocabularRussian.adjectives} setLerned={props.setAdjectivesToVocabularRussian}/> } /> 
                     <Route path="/adjectives/eng-rus" element={<RusEng vocabular={adjectives} lerned={props.vocabularEnglish.adjectives} setLerned={props.setAdjectivesToVocabularEnglish}/> } /> 
                     <Route path="/nouns/spell" element={<Spell vocabular={adjectives} lerned={props.vocabularSpell.adjectives} setLerned={props.setAdjectivesToVocabularSpell}/>} />
