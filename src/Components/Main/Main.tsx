@@ -6,6 +6,7 @@ import GroupsOfWords from "../GroupsOfWords/GroupsOfWords";
 import RussianToEnglish from "../RusEng/RussianToEnglish";
 import EnglishToRussian from "../EngRus/EnglishToRussian";
 import Spell from "../Spell/Spell";
+import Listening from "../Listening/Listening";
 
 
 export default function Main(){
@@ -20,10 +21,12 @@ export default function Main(){
                     <Route path="nouns/eng-rus" element={<EnglishToRussian group={'nouns'} />} />
                     <Route path="nouns/rus-eng" element={<RussianToEnglish group={'nouns'} />} />
                     <Route path="nouns/spell" element={<Spell group={'nouns'} />} />
+                    <Route path="nouns/listening" element={<Listening group={'nouns'} />} />
 
                     <Route path="adjectives/eng-rus" element={<EnglishToRussian group={'adjectives'} />} />
                     <Route path="adjectives/rus-eng" element={<RussianToEnglish group={'adjectives'} />} />
                     <Route path="adjectives/spell" element={<Spell group={'adjectives'} />} />
+                    <Route path="adjectives/listening" element={<Listening group={'adjectives'} />} />
                 </Routes>
         </div>
     )

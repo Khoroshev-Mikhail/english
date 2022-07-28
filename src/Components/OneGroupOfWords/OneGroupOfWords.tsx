@@ -7,10 +7,7 @@ export default function OneGroupOfWords(props: any){
             <p><Link to="eng-rus">Английский - Русский  из </Link></p>
             <p><Link to="rus-eng">Русский - Английский </Link></p>
             <p><Link to="spell">По буквам</Link></p>
-            {/*
-            <p><Link to="spell">По буквам ({props.spell.length} из {props.max})</Link></p>
-            <p>Аудирование</p>
-            */}
+            <p><Link to="listening">Аудирование</Link></p>
         </div>
     )
 }

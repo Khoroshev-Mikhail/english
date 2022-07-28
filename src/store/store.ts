@@ -123,11 +123,13 @@ export type UsersVocabulary = {
     russianToEnglish: number[],
     englishToRussian: number[],
     spell: number[],
+    listening: number[] //Как указать пустой массив?
 }
 const userVocabulary = {
     russianToEnglish: [ 1, 2, 3, 4, 5],
     englishToRussian: [ 1, 2, 3, 4, 5],
     spell: [ 1, 2, 3, 4, 5],
+    listening: [1, 2]
 }
 export const vocabularSlice = createSlice({
     name: 'usersVocabular',
@@ -137,9 +139,10 @@ export const vocabularSlice = createSlice({
         setRussianToEnglish: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, russianToEnglish: [...state.russianToEnglish, action.payload]}),
         setEnglishToRussian: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, englishToRussian: [...state.englishToRussian, action.payload]}),
         setSpell: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, spell: [...state.spell, action.payload]}),
+        setListening: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, listening: [...state.listening, action.payload]}),
     }
 })
-export const {setRussianToEnglish, setEnglishToRussian, setSpell} = vocabularSlice.actions
+export const {setRussianToEnglish, setEnglishToRussian, setSpell, setListening} = vocabularSlice.actions
 
 export const store = configureStore({
     reducer: {
