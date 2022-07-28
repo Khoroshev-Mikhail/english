@@ -1,36 +1,33 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { falseVariants, randomWord } from "../../store/myFns"
-import { setUserVocabulary, Words } from "../../store/store"
+import { AppDispatch, RootState, setRussianToEnglish, Word } from "../../store/store"
 
-export default function EngRus2(props: {group: string}){
-    const dispatch = useDispatch()
-    const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Words) => el.groups.includes(props.group)))
-    const lerned = useSelector((state: any) => state.userVocabulary)
-    const [err, setEtt] = useState(true) //Или как вызвать перерендер компонента?
-    console.log(lerned)
-    let random = randomWord(wordsByGroup, lerned)
-    let variants = falseVariants(wordsByGroup, random)
+export default function RussianToEnglish(props: {group: string}){
+    const dispatch: AppDispatch = useDispatch()
+    const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
+    const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.russianToEnglish))
+    const [tryAgain, setTryAgain] = useState<boolean>(true) //Для перерисовки неправильного ответа
+    let variants = falseVariants(wordsByGroup, random) //в таких случаях Объявляют заранее или можно внутри вёрстки
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
-    audio.play()
 
     function tryIt(e: any){
         if(e.target.value === random.eng){
             audio.play()
             setTimeout(()=>{
-                dispatch(setUserVocabulary(random.id))
+                dispatch(setRussianToEnglish(random.id))
             }, 1000)
-        } else{
-            setEtt(false)
+        } else {
+            setTryAgain(!tryAgain)
         }
     }
     if(!random){
         return <h1>Congrats! Все слова изучены!</h1>
     }
-    console.log(random)
+
     return (
         <div className="RusEng">
-            <h1>{random.eng}</h1>
+            <h1>{random.rus}</h1>
             <div className="RusEng__Variants">
                 {variants.map(el => {
                     return (
@@ -41,7 +38,7 @@ export default function EngRus2(props: {group: string}){
                             value={el.eng}
                             onClick={tryIt}
                             > 
-                            {el.rus}
+                            {el.eng}
                         </button>
                         )
                 })}

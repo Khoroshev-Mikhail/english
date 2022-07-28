@@ -1,29 +1,37 @@
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { RootState, Word } from "../../store/store"
 import './GroupsOfWords.css'
-import { nouns, adjectives, UserVocabular } from "../../store/store"
-type GroupsOfWordsProps = {
-    russian: UserVocabular,
-    english: UserVocabular,
-    spell: UserVocabular,
-}
+
 //Дублирование кода
-export default function GroupsOfWords(props: GroupsOfWordsProps){
+export default function GroupsOfWords(props: any){
+    const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
+    const nouns = useSelector((state: RootState) => state.dictionary.filter(el => el.groups.includes('nouns')))
+    const nounsRussianToEnglish = nouns.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
+    const nounsEnglishToRussian = nouns.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
+    const nounsSpell = nouns.filter(el => userVocabulary.spell.includes(el.id)).length
+    const adjectives = useSelector((state: RootState) => state.dictionary.filter(el => el.groups.includes('adjectives')))
+    const adjectivesRussianToEnglish = adjectives.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
+    const adjectivesEnglishToRussian = adjectives.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
+    const adjectivesSpell = adjectives.filter(el => userVocabulary.spell.includes(el.id)).length
     return (
         <div className="GroupsOfWords">
                     <Link to={'/nouns'}>
                         <div className="GroupsOfWords__oneGroupOfWord">
                             Топ-100 Существительных
-                            <span><progress value={props.russian.nouns.length} max={nouns.length}></progress> {Math.round(props.russian.nouns.length / nouns.length * 100)}%</span>
-                            <span><progress value={props.english.nouns.length} max={nouns.length}></progress> {Math.round(props.english.nouns.length / nouns.length * 100)}%</span>
-                            <span><progress value={props.spell.nouns.length} max={nouns.length}></progress> {Math.round(props.spell.nouns.length / nouns.length * 100)}%</span>
-                        </div>
+                            <span><progress value={nounsRussianToEnglish} max={nouns.length}></progress>{nounsRussianToEnglish} из {nouns.length}</span>
+                            <span><progress value={nounsEnglishToRussian} max={nouns.length}></progress>{nounsEnglishToRussian} из {nouns.length}</span>
+                            <span><progress value={nounsSpell} max={nouns.length}></progress>{nounsSpell} из {nouns.length}</span>
+                            
+                            </div>
                     </Link>
                     <Link to={'/adjectives'}> 
                         <div className="GroupsOfWords__oneGroupOfWord">
                             Топ-100 Прилагательных
-                            <span><progress value={props.russian.adjectives.length} max={adjectives.length}></progress> {Math.round(props.russian.adjectives.length / adjectives.length * 100)}%</span>
-                            <span><progress value={props.english.adjectives.length} max={adjectives.length}></progress> {Math.round(props.english.adjectives.length / adjectives.length * 100)}%</span>
-                            <span><progress value={props.spell.adjectives.length} max={adjectives.length}></progress> {Math.round(props.spell.adjectives.length / adjectives.length * 100)}%</span>
+                            <span><progress value={adjectivesRussianToEnglish} max={adjectives.length}></progress>{adjectivesRussianToEnglish} из {adjectives.length}</span>
+                            <span><progress value={adjectivesEnglishToRussian} max={adjectives.length}></progress>{adjectivesEnglishToRussian} из {adjectives.length}</span>
+                            <span><progress value={adjectivesSpell} max={adjectives.length}></progress>{adjectivesSpell} из {adjectives.length}</span>
+                            
                         </div>
                     </Link>
         </div>

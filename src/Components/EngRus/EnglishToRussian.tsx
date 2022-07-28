@@ -1,27 +1,29 @@
 import { useState } from "react"
-import { falseVariantsArray, unlerned } from "../../store/myFns"
-import { PropsForLerning } from "../Main/Main"
+import { useDispatch, useSelector } from "react-redux"
+import { falseVariants, randomWord } from "../../store/myFns"
+import { AppDispatch, RootState, setEnglishToRussian, Word } from "../../store/store"
 
-export default function EngRus(props: PropsForLerning){
-    //Добавить раскрашивание кнопки по клику (правильно желтый и не правильно красный)
-    const [random, setRandom] = useState(unlerned(props.vocabular, props.lerned)) //Вытащить из редакса useSelector
-    const variants = falseVariantsArray(props.vocabular, random)
+export default function EnglishToRussian(props: { group: string }){
+    const dispatch: AppDispatch = useDispatch()
+    const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
+    const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.englishToRussian))
+    const [tryAgain, setTryAgain] = useState(true) //Или как вызвать перерендер компонента?
+    let variants = falseVariants(wordsByGroup, random)
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
     audio.play()
-    if(!random){
-        return <h1>Congrats! Все слова изучены!</h1>
-    }
 
-    function tryIt(e: any){ //Какой тип е? На выходе void?
+    function tryIt(e: any){
         if(e.target.value === random.eng){
             audio.play()
             setTimeout(()=>{
-                props.setLerned(Number(e.target.id)) //Работают ассинхронно (после правильного клика может отрисовать то же слово)
-                setRandom(unlerned(props.vocabular, props.lerned))
+                dispatch(setEnglishToRussian(random.id))
             }, 1000)
-        } else{
-            setRandom(unlerned(props.vocabular, props.lerned))
+        } else {
+            setTryAgain(!tryAgain)
         }
+    }
+    if(!random){
+        return <h1>Congrats! Все слова изучены!</h1>
     }
 
     return (
