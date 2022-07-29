@@ -1,15 +1,13 @@
-import React from "react"
-import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { randomWord } from "../../store/myFns"
 import { AppDispatch, RootState, setListening, Word } from "../../store/store"
 
 export default function Listening(props: { group: string }){
     //Добавить автофокус
+    //Добавить баттон nextWord (на случай если пользователь не сможет угадать)
     const dispatch: AppDispatch = useDispatch()
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.russianToEnglish))
-    const [answer, setAnswer] = useState<string>('')
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`)
     audio.play()
     function tryIt(e: any){
@@ -24,7 +22,6 @@ export default function Listening(props: { group: string }){
             },1000)
         }
     }
-    console.log(random.eng)
     function repeat(){
         audio.play()
     }

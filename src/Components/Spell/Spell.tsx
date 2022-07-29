@@ -18,8 +18,10 @@ export default function Spell(props: {group: string}){
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
     function tryIt(e: any){
         setAnswer(answer => answer.concat(e.target.value))
+        setWordBySpell(wordBySpell => wordBySpell.filter(letter => letter !== e.target.value))
     }
     function backLetter(e: any){
+        setWordBySpell(wordBySpell => wordBySpell.concat(e.target.value))
         setAnswer(answer => answer.filter(letter => letter !== e.target.value))
     }
     //Или как сделать чтобы работало синхронно в функции tryIt?
@@ -42,14 +44,14 @@ export default function Spell(props: {group: string}){
             <div className="Spell__answerString"> {answer.map((el, i) =>{
                 return (
                     <button key={i+random.eng.length} value={el} onClick={backLetter}>
-                        {el.at(1)}
+                        {el[1] /* el.at(0) не работает в safari */}
                     </button>
                     )
             })} </div>
             {wordBySpell.map((el, i) => {
                 return (
-                    <button key={i} value={el} onClick={tryIt} style={{display: answer.includes(el) ? 'none' : 'inline'}}>
-                        {el.at(1)}
+                    <button key={i} value={el} onClick={tryIt}>
+                        {el[1] /* el.at(0) не работает в safari */}
                     </button>
                 )
             })}
