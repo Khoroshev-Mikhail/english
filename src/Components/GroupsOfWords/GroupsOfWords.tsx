@@ -5,7 +5,14 @@ import './GroupsOfWords.css'
 
 //Дублирование кода
 export default function GroupsOfWords(props: any){
+    //Получить массив групп слов отфильтрова dictionary
+    const groupsOfWords = useSelector((state: RootState) => {
+        let flatState = state.dictionary.map(el => el.groups).flat()
+        let setState = new Set(flatState)
+        return Array.from(setState)
+    })
     const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
+    const dictionary = useSelector((state: RootState) => state.dictionary)
     const nouns = useSelector((state: RootState) => state.dictionary.filter(el => el.groups.includes('nouns')))
     const nounsRussianToEnglish = nouns.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
     const nounsEnglishToRussian = nouns.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
@@ -21,6 +28,20 @@ export default function GroupsOfWords(props: any){
     //Добавить новую компоненту
     return (
         <div className="GroupsOfWords">
+            {groupsOfWords.map((group: string) => {
+                const filtredByGroupDictionary = dictionary.filter(el => el.groups.includes(group))
+                return (
+                    <Link to={`/${group}`}>
+                        <div className="GroupsOfWords__oneGroupOfWord">
+                            Топ-100 Существительных
+                            <span><progress value={nounsRussianToEnglish} max={nouns.length}></progress>{nounsRussianToEnglish} из {nouns.length}</span>
+                            <span><progress value={nounsEnglishToRussian} max={nouns.length}></progress>{nounsEnglishToRussian} из {nouns.length}</span>
+                            <span><progress value={nounsSpell} max={nouns.length}></progress>{nounsSpell} из {nouns.length}</span>
+                            <span><progress value={nounsListening} max={nouns.length}></progress>{nounsListening} из {nouns.length}</span>
+                        </div>
+                    </Link>
+                )
+            })}
                     <Link to={'/nouns'}>
                         <div className="GroupsOfWords__oneGroupOfWord">
                             Топ-100 Существительных
@@ -33,8 +54,8 @@ export default function GroupsOfWords(props: any){
                     <Link to={'/adjectives'}> 
                         <div className="GroupsOfWords__oneGroupOfWord">
                             Топ-100 Прилагательных
-                            <span><progress value={adjectivesRussianToEnglish} max={adjectives.length}></progress>{adjectivesRussianToEnglish} из {adjectives.length}</span>
                             <span><progress value={adjectivesEnglishToRussian} max={adjectives.length}></progress>{adjectivesEnglishToRussian} из {adjectives.length}</span>
+                            <span><progress value={adjectivesRussianToEnglish} max={adjectives.length}></progress>{adjectivesRussianToEnglish} из {adjectives.length}</span>
                             <span><progress value={adjectivesSpell} max={adjectives.length}></progress>{adjectivesSpell} из {adjectives.length}</span>
                             <span><progress value={adjectivesListening} max={adjectives.length}></progress>{adjectivesListening} из {adjectives.length}</span>
                         </div>
