@@ -1,3 +1,4 @@
+import { useId } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { RootState } from "../../store/store"
@@ -5,7 +6,6 @@ import './GroupsOfWords.css'
 
 //Дублирование кода
 export default function GroupsOfWords(props: any){
-    //Получить массив групп слов отфильтрова dictionary
     const groupsOfWords = useSelector((state: RootState) => {
         let flatState = state.dictionary.map(el => el.groups).flat()
         let setState = new Set(flatState)
@@ -13,53 +13,30 @@ export default function GroupsOfWords(props: any){
     })
     const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
     const dictionary = useSelector((state: RootState) => state.dictionary)
-    const nouns = useSelector((state: RootState) => state.dictionary.filter(el => el.groups.includes('nouns')))
-    const nounsRussianToEnglish = nouns.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
-    const nounsEnglishToRussian = nouns.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
-    const nounsSpell = nouns.filter(el => userVocabulary.spell.includes(el.id)).length
-    const nounsListening = nouns.filter(el => userVocabulary.listening.includes(el.id)).length
-
-
-    const adjectives = useSelector((state: RootState) => state.dictionary.filter(el => el.groups.includes('adjectives')))
-    const adjectivesRussianToEnglish = adjectives.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
-    const adjectivesEnglishToRussian = adjectives.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
-    const adjectivesSpell = adjectives.filter(el => userVocabulary.spell.includes(el.id)).length
-    const adjectivesListening = adjectives.filter(el => userVocabulary.listening.includes(el.id)).length
+    const id = useId()
     //Добавить новую компоненту
+    //Не ренедерятся значения после сетанья
     return (
         <div className="GroupsOfWords">
-            {groupsOfWords.map((group: string) => {
-                const filtredByGroupDictionary = dictionary.filter(el => el.groups.includes(group))
+            
+            {groupsOfWords.map((group: string, i) => {
+                const currentDictionary = dictionary.filter(el => el.groups.includes(group))
+                const engToRus = currentDictionary.filter(el => userVocabulary.englishToRussian.includes(el.id)).length
+                const rusToEng = currentDictionary.filter(el => userVocabulary.russianToEnglish.includes(el.id)).length
+                const spell = currentDictionary.filter(el => userVocabulary.spell.includes(el.id)).length
+                const listening = currentDictionary.filter(el => userVocabulary.listening.includes(el.id)).length
                 return (
-                    <Link to={`/${group}`}>
+                    <Link to={`/${group}`} key={id + i}>
                         <div className="GroupsOfWords__oneGroupOfWord">
-                            Топ-100 Существительных
-                            <span><progress value={nounsRussianToEnglish} max={nouns.length}></progress>{nounsRussianToEnglish} из {nouns.length}</span>
-                            <span><progress value={nounsEnglishToRussian} max={nouns.length}></progress>{nounsEnglishToRussian} из {nouns.length}</span>
-                            <span><progress value={nounsSpell} max={nouns.length}></progress>{nounsSpell} из {nouns.length}</span>
-                            <span><progress value={nounsListening} max={nouns.length}></progress>{nounsListening} из {nouns.length}</span>
+                            <div>{group}</div>
+                            <span><progress value={engToRus} max={currentDictionary.length}></progress>{engToRus} из {currentDictionary.length}</span>
+                            <span><progress value={rusToEng} max={currentDictionary.length}></progress>{rusToEng} из {currentDictionary.length}</span>
+                            <span><progress value={spell} max={currentDictionary.length}></progress>{spell} из {currentDictionary.length}</span>
+                            <span><progress value={listening} max={currentDictionary.length}></progress>{listening} из {currentDictionary.length}</span>
                         </div>
                     </Link>
                 )
             })}
-                    <Link to={'/nouns'}>
-                        <div className="GroupsOfWords__oneGroupOfWord">
-                            Топ-100 Существительных
-                            <span><progress value={nounsRussianToEnglish} max={nouns.length}></progress>{nounsRussianToEnglish} из {nouns.length}</span>
-                            <span><progress value={nounsEnglishToRussian} max={nouns.length}></progress>{nounsEnglishToRussian} из {nouns.length}</span>
-                            <span><progress value={nounsSpell} max={nouns.length}></progress>{nounsSpell} из {nouns.length}</span>
-                            <span><progress value={nounsListening} max={nouns.length}></progress>{nounsListening} из {nouns.length}</span>
-                            </div>
-                    </Link>
-                    <Link to={'/adjectives'}> 
-                        <div className="GroupsOfWords__oneGroupOfWord">
-                            Топ-100 Прилагательных
-                            <span><progress value={adjectivesEnglishToRussian} max={adjectives.length}></progress>{adjectivesEnglishToRussian} из {adjectives.length}</span>
-                            <span><progress value={adjectivesRussianToEnglish} max={adjectives.length}></progress>{adjectivesRussianToEnglish} из {adjectives.length}</span>
-                            <span><progress value={adjectivesSpell} max={adjectives.length}></progress>{adjectivesSpell} из {adjectives.length}</span>
-                            <span><progress value={adjectivesListening} max={adjectives.length}></progress>{adjectivesListening} из {adjectives.length}</span>
-                        </div>
-                    </Link>
         </div>
     )
 }
