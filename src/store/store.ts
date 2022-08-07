@@ -34,7 +34,7 @@ const dictionarySlice = createSlice({
         setDictionary: (state: any /*: Word[] ???????????*/, action: PayloadAction<number>) => [...state, action.payload]
     },
     extraReducers: (builder) => {
-        //builder.addCase(dictionaryThunk.pending, (state, action) => dictionary) // что указать в loade?
+
         builder.addCase(dictionaryThunk.fulfilled, (state, action) => action.payload)
         //builder.addCase(dictionaryThunk.rejected, (state, action) => dictionary) //что указать в ошибке?
     }
@@ -71,6 +71,7 @@ export const vocabularSlice = createSlice({
     initialState: userVocabulary,
     reducers: {
         //Правильно указать типы TS???
+        //Если все хранится в БД - редьюсеры уже не нужны?
         setRussianToEnglish: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, russianToEnglish: [...state.russianToEnglish, action.payload]}),
         setEnglishToRussian: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, englishToRussian: [...state.englishToRussian, action.payload]}),
         setSpell: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, spell: [...state.spell, action.payload]}),

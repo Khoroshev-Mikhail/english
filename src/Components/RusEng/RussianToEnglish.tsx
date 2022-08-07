@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { falseVariants, randomWord } from "../../store/myFns"
-import { AppDispatch, RootState, setRussianToEnglish, Word } from "../../store/store"
+import { AppDispatch, RootState, Word, vocabularThunk } from "../../store/store"
 
 export default function RussianToEnglish(props: {group: string}){
     const dispatch: AppDispatch = useDispatch()
@@ -15,7 +15,18 @@ export default function RussianToEnglish(props: {group: string}){
         if(e.target.value === random.eng){
             audio.play()
             setTimeout(()=>{
-                dispatch(setRussianToEnglish(random.id))
+                new Promise((resolve, reject) => {
+                    resolve(fetch('http://localhost:3001/setVocabulary', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        }, 
+                        body: JSON.stringify({method: 'russianToEnglish', idWord: random.id})
+                    }))
+                })
+                .then(result => {
+                    dispatch(vocabularThunk())
+                }, error => {console.log('errorrrr')})
             }, 1000)
         } else {
             setTryAgain(!tryAgain)

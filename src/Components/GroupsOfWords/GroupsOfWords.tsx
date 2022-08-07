@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 import { RootState } from "../../store/store"
 import './GroupsOfWords.css'
 
-//Дублирование кода
 export default function GroupsOfWords(props: any){
     const groupsOfWords = useSelector((state: RootState) => {
         let flatState = state.dictionary.map(el => el.groups).flat()
@@ -18,7 +17,6 @@ export default function GroupsOfWords(props: any){
     //Не ренедерятся значения после сетанья
     return (
         <div className="GroupsOfWords">
-            
             {groupsOfWords.map((group: string, i) => {
                 const currentDictionary = dictionary.filter(el => el.groups.includes(group))
                 const engToRus = currentDictionary.filter(el => userVocabulary.englishToRussian.includes(el.id)).length

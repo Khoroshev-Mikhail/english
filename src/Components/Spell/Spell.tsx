@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { randomWord, wordForSpell } from "../../store/myFns"
-import { setSpell, Word } from "../../store/store"
+import { AppDispatch, RootState, vocabularThunk, Word } from "../../store/store"
 import './Spell.css'
 
 export default function Spell(props: {group: string}){
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
     const lerned = useSelector((state: any) => state.userVocabulary.spell)
+    
+    //ЗАЦИКЛИВАЕТСЯ. почему?
+    //const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.spell))
+    //
 
-    //ИСПОЛЬЗУЮ ЛОКАЛЬНЫЙ СТЕЙТ, ЧТОБЫ НЕБЫЛО ПЕРЕРЕСОВКИ ПРИ КАЖДОМ КЛИКЕ, ЭТО ВЕРНО?
-    //
-    //
     const [random, setRandom] = useState<Word>(randomWord(wordsByGroup, lerned))
     const [answer, setAnswer] = useState<string[ ]>([])
     const [wordBySpell, setWordBySpell] = useState(wordForSpell(random.eng)) //для статичного расположение букв при обратном клике
@@ -26,16 +27,29 @@ export default function Spell(props: {group: string}){
     }
     //Или как сделать чтобы работало синхронно в функции tryIt?
     useEffect(()=>{
-        if(answer.map(el => el[1]).join('') === random.eng){
+        console.log('useEffect [ANSWER]')
+        if(answer.map(el => el[1]).join('') === random.eng && random.eng.length > 0){
             audio.play()
             setTimeout(()=>{
-                dispatch(setSpell(random.id))
+                new Promise((resolve, reject) => {
+                    resolve(fetch('http://localhost:3001/setVocabulary', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        }, 
+                        body: JSON.stringify({method: 'spell', idWord: random.id})
+                    }))
+                })
+                .then(result => {
+                    dispatch(vocabularThunk())
+                }, error => {console.log('errorrrr')})
                 setAnswer([])
                 setRandom(randomWord(wordsByGroup, lerned))
             }, 1000)
         }
     }, [answer])
     useEffect(()=>{
+        console.log('useEffect [RANDOM]')
         setWordBySpell(wordForSpell(random.eng))
     }, [random])
     return(
