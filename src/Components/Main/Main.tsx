@@ -7,6 +7,7 @@ import RussianToEnglish from "../RusEng/RussianToEnglish";
 import EnglishToRussian from "../EngRus/EnglishToRussian";
 import Spell from "../Spell/Spell";
 import Listening from "../Listening/Listening";
+import Admin from "../Admin/Admin";
 
 
 export default function Main(){
@@ -14,6 +15,8 @@ export default function Main(){
         <div className="main">
                 <Header />
                 <Routes>
+                    <Route path="/admin" element={<Admin />} />
+
                     <Route path="/" element={<GroupsOfWords/>} />
                     <Route path="nouns" element={<OneGroupOfWords title={'Топ-100 существительных'} />} />
                     <Route path="adjectives" element={<OneGroupOfWords title={'Топ-100 прилагательных'} />} />

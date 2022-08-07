@@ -4,7 +4,8 @@ export default function Header(){
     //Добавить хлебные крошки
     return (
         <header>
-                <Link to={'/'}>Главная</Link>
+            <Link to={'/'}> Главная </Link>
+            <Link to={'/admin'}> Admin </Link>
         </header>
     )
 }
