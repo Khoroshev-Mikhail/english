@@ -8,6 +8,10 @@ import EnglishToRussian from "../EngRus/EnglishToRussian";
 import Spell from "../Spell/Spell";
 import Listening from "../Listening/Listening";
 import Admin from "../Admin/Admin";
+import AddNewWord from "../Admin/AddNewWord/AddNewWord";
+import ChangeWord from "../Admin/ChangeWord/ChangeWord";
+import AddNewGroup from "../Admin/AddNewGroup/AddNewGroup";
+import ChangeGroup from "../Admin/ChangeGroup/ChangeGroup";
 
 
 export default function Main(){
@@ -16,6 +20,10 @@ export default function Main(){
                 <Header />
                 <Routes>
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/addNewWord" element={<AddNewWord />} />
+                    <Route path="/changeWord" element={<ChangeWord />} />
+                    <Route path="/addNewGroup" element={<AddNewGroup />} />
+                    <Route path="/changeGroup" element={<ChangeGroup />} />
 
                     <Route path="/" element={<GroupsOfWords/>} />
                     <Route path="nouns" element={<OneGroupOfWords title={'Топ-100 существительных'} />} />

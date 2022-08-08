@@ -68,13 +68,14 @@ export const vocabularThunk = createAsyncThunk(
 export const vocabularSlice = createSlice({
     name: 'usersVocabular',
     initialState: userVocabulary,
-    reducers: {
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(vocabularThunk.fulfilled, (state, action) => action.payload)
     }
 })
 
+
+export type Group = {eng: string, title: string}
 export const groupsThunk = createAsyncThunk(
     'groups',
     async function(){
@@ -86,9 +87,7 @@ export const groupsThunk = createAsyncThunk(
 export const groupsSlice = createSlice({
     name: 'groupsSlice',
     initialState: [],
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(groupsThunk.fulfilled, (state, action) => action.payload)
     }
