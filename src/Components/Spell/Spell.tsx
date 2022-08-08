@@ -15,6 +15,8 @@ export default function Spell(props: {group: string}){
 
     const [random, setRandom] = useState<Word>(randomWord(wordsByGroup, lerned))
     const [answer, setAnswer] = useState<string[ ]>([])
+
+    //ПОПРОБОАВИТЬ useContext hook
     const [wordBySpell, setWordBySpell] = useState(wordForSpell(random.eng)) //для статичного расположение букв при обратном клике
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
     function tryIt(e: any){
