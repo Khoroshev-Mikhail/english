@@ -19,16 +19,15 @@ export const dictionary: Word[] = [
 ]
 
 export const dictionaryThunk = createAsyncThunk(
-    'dictionary',
+    'dictionaryThunk',
     async function() /*: Word[] ??????*/{
         const response = await fetch('http://localhost:3001/dictionary')
         const data: Word[] = await response.json()
         return data
     }
 )
-
 const dictionarySlice = createSlice({
-    name: 'dictionaryThunk',
+    name: 'dictionarySlice',
     initialState: dictionary,
     reducers: {
         setDictionary: (state: any /*: Word[] ???????????*/, action: PayloadAction<number>) => [...state, action.payload]
@@ -70,23 +69,39 @@ export const vocabularSlice = createSlice({
     name: 'usersVocabular',
     initialState: userVocabulary,
     reducers: {
-        //Правильно указать типы TS???
-        //Если все хранится в БД - редьюсеры уже не нужны?
-        setRussianToEnglish: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, russianToEnglish: [...state.russianToEnglish, action.payload]}),
-        setEnglishToRussian: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, englishToRussian: [...state.englishToRussian, action.payload]}),
-        setSpell: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, spell: [...state.spell, action.payload]}),
-        setListening: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, listening: [...state.listening, action.payload]}),
     },
     extraReducers: (builder) => {
         builder.addCase(vocabularThunk.fulfilled, (state, action) => action.payload)
     }
 })
-export const {setRussianToEnglish, setEnglishToRussian, setSpell, setListening} = vocabularSlice.actions
+
+export const groupsThunk = createAsyncThunk(
+    'groups',
+    async function(){
+        const response = await fetch('http://localhost:3001/groups')
+        const data = response.json()
+        return data
+    }
+)
+export const groupsSlice = createSlice({
+    name: 'groupsSlice',
+    initialState: [],
+    reducers: {
+
+    },
+    extraReducers: (builder) => {
+        builder.addCase(groupsThunk.fulfilled, (state, action) => action.payload)
+    }
+})
+
+
+
 
 export const store = configureStore({
     reducer: {
         userVocabulary: vocabularSlice.reducer,
         dictionary: dictionarySlice.reducer,
+        groups: groupsSlice.reducer,
     }
 })
 export type RootState = ReturnType<typeof store.getState>
