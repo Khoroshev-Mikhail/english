@@ -16,7 +16,7 @@ import ChangeGroup from "../Admin/ChangeGroup/ChangeGroup";
 
 export default function Main(){
     return (
-        <div className="main">
+        <div className="container mx-auto px-4 text-base font-sans">
                 <Header />
                 <Routes>
                     <Route path="/admin" element={<Admin />} />

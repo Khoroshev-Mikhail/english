@@ -21,8 +21,9 @@ export default function GroupsOfWords(){
                 const listening = currentDictionary.filter(el => userVocabulary.listening.includes(el.id)).length
                 return (
                     <Link to={`/${group.eng}`} key={id + i}>
-                        <div className="GroupsOfWords__oneGroupOfWord">
-                            <div>{group.title}</div>
+                        <div className="flex flex-col m-4 p-2 border-solid border-2 rounded-lg border-sky-500 content-between">
+                            <div className="text-center py-2">{group.title}</div>
+                            
                             <span><progress value={engToRus} max={currentDictionary.length}></progress>{engToRus} из {currentDictionary.length}</span>
                             <span><progress value={rusToEng} max={currentDictionary.length}></progress>{rusToEng} из {currentDictionary.length}</span>
                             <span><progress value={spell} max={currentDictionary.length}></progress>{spell} из {currentDictionary.length}</span>
