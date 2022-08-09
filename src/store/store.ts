@@ -74,18 +74,19 @@ export const vocabularSlice = createSlice({
 })
 
 
-export type Group = {eng: string, title: string}
+export type Group = {id: number, eng: string, title: string}
+const groups: Group[] = [{id: 0, eng: 'nouns', title: 'Топ-100 существительных'}]
 export const groupsThunk = createAsyncThunk(
     'groups',
     async function(){
         const response = await fetch('http://localhost:3001/groups')
-        const data = response.json()
+        const data: Group[] = await response.json()
         return data
     }
 )
 export const groupsSlice = createSlice({
     name: 'groupsSlice',
-    initialState: [],
+    initialState: groups,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(groupsThunk.fulfilled, (state, action) => action.payload)

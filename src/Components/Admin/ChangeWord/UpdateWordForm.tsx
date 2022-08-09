@@ -5,7 +5,7 @@ import './updateWordForm.css'
 
 export default function UpdateWordForm(props: {id: number}){
     const dispatch = useDispatch<AppDispatch>()
-    let dictionary = useSelector((state: RootState) => state.dictionary)
+    const dictionary = useSelector((state: RootState) => state.dictionary)
     //const [word, setWord] = useState(dictionary.find(el => el.id === props.id)) //Как переписать на это????
     const [word, setWord] = useState(dictionary.filter(el => el.id === props.id)[0])
     const allGroups = useSelector((state: RootState) => state.groups)

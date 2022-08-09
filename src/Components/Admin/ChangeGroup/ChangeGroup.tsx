@@ -1,5 +1,25 @@
+import { useId } from "react"
+import { useSelector } from "react-redux"
+import { Group, RootState } from "../../../store/store"
+import './ChangeGroup.css'
+import UpdateGroupForm from "./UpdateGroupForm"
+
 export default function ChangeGroup(){
+    const allGroups = useSelector((state: RootState) => state.groups)
+    const id = useId()
     return (
-        <h1>ChangeGroup</h1>
+        <div className="globalTableWords">
+            <div className="topbar">
+                <div className="topbar__1">_id</div>
+                <div className="topbar__2">eng</div>
+                <div className="topbar__3">rus</div>
+                <div className="topbar__4">groups</div>
+            </div>
+            {allGroups.map((el: Group, i) => {
+                return (
+                    <UpdateGroupForm id={el.id} key={id + i}/>
+                )
+            })}
+        </div>
     )
 }

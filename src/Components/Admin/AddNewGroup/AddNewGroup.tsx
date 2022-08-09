@@ -4,8 +4,11 @@ import { AppDispatch, dictionaryThunk, groupsThunk, RootState } from "../../../s
 
 export default function AddNewGroup(){
     const dispatch = useDispatch<AppDispatch>()
+    const id = useId()
     const [eng, setEng] = useState<string>('')
     const [title, setTitle] = useState<string>('')
+    const allGroups = useSelector((state: RootState) => state.groups)
+    const nextId = Math.max(...allGroups.map(el => el.id)) + 1
     function handlerSubmit(e: any){
         e.preventDefault()
         new Promise((resolve, reject) => {
@@ -22,20 +25,21 @@ export default function AddNewGroup(){
             dispatch(groupsThunk())
         }, error => {console.log('errorrrr')})
     }
-    const id = useId()
     return (
         <div>
-            <h1>Добавить новое слово</h1>
+            <h1>Добавить новую группу</h1>
             <form onSubmit={handlerSubmit}>
                 <table>
                     <thead>
                         <tr>
+                            <th>_nextId</th>
                             <th>Eng</th>
                             <th>Title</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td><input type="text" value={nextId} disabled={true} /></td>
                             <td><input type="text" value={eng} onChange={(e)=>setEng(e.target.value)} /></td>
                             <td><input type="text" value={title} onChange={(e)=>setTitle(e.target.value)} /></td>
                         </tr>
