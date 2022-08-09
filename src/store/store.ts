@@ -23,7 +23,7 @@ export const dictionaryThunk = createAsyncThunk(
     async function() /*: Word[] ??????*/{
         const response = await fetch('http://localhost:3001/dictionary')
         const data: Word[] = await response.json()
-        return data
+        return data.sort((a:any, b:any) => a.eng.localeCompare(b.eng))
     }
 )
 const dictionarySlice = createSlice({
@@ -33,7 +33,6 @@ const dictionarySlice = createSlice({
         setDictionary: (state: any /*: Word[] ???????????*/, action: PayloadAction<number>) => [...state, action.payload]
     },
     extraReducers: (builder) => {
-
         builder.addCase(dictionaryThunk.fulfilled, (state, action) => action.payload)
         //builder.addCase(dictionaryThunk.rejected, (state, action) => dictionary) //что указать в ошибке?
     }

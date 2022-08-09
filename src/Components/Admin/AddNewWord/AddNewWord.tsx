@@ -54,11 +54,8 @@ export default function AddNewWord(){
                         </tr>
                     </tbody>
                 </table>
-                <input type="submit" value="Отправить" />
+                <input type="submit" value="Добавить слово в словарь" />
             </form>
-            <h1>Изменить слово</h1>
-            <h1>Добавить новую группу</h1>
-            <h1>Изменить группу</h1>
         </div>
     )
 }
