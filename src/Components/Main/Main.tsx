@@ -14,7 +14,7 @@ import AddNewGroup from "../Admin/AddNewGroup/AddNewGroup";
 import ChangeGroup from "../Admin/ChangeGroup/ChangeGroup";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { useId } from "react";
+import React, { useId } from "react";
 
 
 export default function Main(){
@@ -35,13 +35,13 @@ export default function Main(){
 
                     {allGroups.map((el, i) => {
                         return (
-                            <>{/**Ругает на отстутствие key */} 
+                            <React.Fragment key={id + i}>{/**Ругает на отстутствие key */} 
                                 <Route path={el.eng} element={<OneGroupOfWords {...el} />} />
                                 <Route path={`${el.eng}/eng-rus`} element={<EnglishToRussian {...el} />} />
                                 <Route path={`${el.eng}/rus-eng`} element={<RussianToEnglish {...el} />} />
                                 <Route path={`${el.eng}/spell`} element={<Spell {...el} />} />
                                 <Route path={`${el.eng}/listening`} element={<Listening {...el} />} />
-                            </>
+                            </React.Fragment>
                         )
                     })}
 

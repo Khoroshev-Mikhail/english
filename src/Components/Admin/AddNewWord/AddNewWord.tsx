@@ -7,9 +7,9 @@ export default function AddNewWord(){
     const id = useId()
     const allGroups = useSelector((state: RootState) => state.groups)
     const dictionary = useSelector((state: RootState) => state.dictionary)
-    const [eng, setEng] = useState<string>('')
-    const [rus, setRus] = useState<string>('')
-    const [groups, setGroups] = useState(['']) //Как определить тип пустого массива?
+    const [eng, setEng] = useState('')
+    const [rus, setRus] = useState('')
+    const [groups, setGroups] = useState<string[]>([]) //Как определить тип пустого массива?
     const nextId = Math.max(...dictionary.map(el => el.id)) + 1
     function handlerSubmit(e: any){
         //Добавить предупреждение на наличие этого слова в словаре если есть
@@ -27,7 +27,7 @@ export default function AddNewWord(){
             dispatch(dictionaryThunk())
             setRus('')
             setEng('')
-            setGroups(['']) //Рефакторинг после исправления типа
+            setGroups([]) //Рефакторинг после исправления типа
         }, error => {console.log('errorrrr')})
     }
     return (
@@ -45,9 +45,9 @@ export default function AddNewWord(){
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" value={nextId} disabled={true} /></td>
-                            <td><input type="text" value={rus} onChange={(e)=>setRus(e.target.value)} /></td>
-                            <td><input type="text" value={eng} onChange={(e)=>setEng(e.target.value)} /></td>
+                            <td><input className="border-2" type="text" value={nextId} disabled={true} /></td>
+                            <td><input className="border-2" type="text" value={rus} onChange={(e)=>setRus(e.target.value)} /></td>
+                            <td><input className="border-2" type="text" value={eng} onChange={(e)=>setEng(e.target.value)} /></td>
                             <td>
                             {allGroups.map((el: any, i) => {
                                 return (

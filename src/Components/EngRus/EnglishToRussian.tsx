@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { setVocabulary } from "../../API/API"
 import { falseVariants, randomWord } from "../../store/myFns"
 import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
 
@@ -11,28 +12,23 @@ export default function EnglishToRussian(props: Group){
     if(!random){
         return <h1>Congrats! Все слова изучены!</h1>
     }
-    let variants = falseVariants(wordsByGroup, random)
+    const variants = falseVariants(wordsByGroup, random)
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
     audio.play()   
 
     function tryIt(e: any){
         if(e.target.value === random.eng){
-            e.target.classList.add('bg-green-500')
+            e.target.classList.add('bg-green-500') //Локальный
             audio.play()
             setTimeout(()=>{
-                new Promise((resolve, reject) => {
-                    resolve(fetch('http://localhost:3001/setVocabulary', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        }, 
-                        body: JSON.stringify({method: 'englishToRussian', idWord: random.id})
-                    }))
-                })
-                .then(result => {
-                    e.target.classList.remove('bg-green-500')
-                    dispatch(vocabularThunk())
-                }, error => {console.log('errorrrr')})
+                setVocabulary(1, 'englishToRussian', random.id)
+                .then(
+                    () => {
+                        e.target.classList.remove('bg-green-500') //Через стейт
+                        dispatch(vocabularThunk(1))
+                    },
+                    () => {console.log('errorrrr')}
+                )
             }, 1000)
         } else {
             e.target.classList.add('bg-red-500')

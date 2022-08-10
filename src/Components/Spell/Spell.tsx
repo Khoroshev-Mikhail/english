@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { setVocabulary } from "../../API/API"
 import { randomWord, wordForSpell } from "../../store/myFns"
 import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
 import './Spell.css'
@@ -35,17 +36,9 @@ export default function Spell(props: Group){
         if(answer.map(el => el[1]).join('') === random.eng && random.eng.length > 0){
             audio.play()
             setTimeout(()=>{
-                new Promise((resolve, reject) => {
-                    resolve(fetch('http://localhost:3001/setVocabulary', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        }, 
-                        body: JSON.stringify({method: 'spell', idWord: random.id})
-                    }))
-                })
+                setVocabulary(1, 'spell', random.id)
                 .then(result => {
-                    dispatch(vocabularThunk())
+                    dispatch(vocabularThunk(1))
                 }, error => {console.log('errorrrr')})
                 setAnswer([])
                 setRandom(randomWord(wordsByGroup, lerned))

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { setVocabulary } from "../../API/API"
 import { falseVariants, randomWord } from "../../store/myFns"
 import { AppDispatch, RootState, Word, vocabularThunk, Group } from "../../store/store"
 
@@ -20,18 +21,10 @@ export default function RussianToEnglish(props: Group){
             e.target.classList.add('bg-green-500')
             audio.play()
             setTimeout(()=>{
-                new Promise((resolve, reject) => {
-                    resolve(fetch('http://localhost:3001/setVocabulary', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        }, 
-                        body: JSON.stringify({method: 'russianToEnglish', idWord: random.id})
-                    }))
-                })
+                setVocabulary(1, 'russianToEnglish', random.id)
                 .then(result => {
                     e.target.classList.remove('bg-green-500')
-                    dispatch(vocabularThunk())
+                    dispatch(vocabularThunk(1))
                 }, error => {console.log('errorrrr')})
             }, 1000)
         } else {

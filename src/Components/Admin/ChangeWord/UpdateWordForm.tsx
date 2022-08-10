@@ -31,9 +31,9 @@ export default function UpdateWordForm(props: {id: number}){
     return(
         <div className="str">
             <form onSubmit={handerlForm}>
-                <input name="id" className="str__1" type={'text'} value={word.id} disabled={true}/>
-                <input name="eng" className="str__2" value={word.eng} type={'text'} onChange={(e)=>{setWord(state => ({...state, eng: e.target.value}))}}/>
-                <input name="rus" className="str__3" value={word.rus} type={'text'} onChange={(e)=>{setWord(state => ({...state, rus: e.target.value}))}}/>
+                <input name="id" className="str__1 border-2" type={'text'} value={word.id} disabled={true}/>
+                <input name="eng" className="str__2 border-2" value={word.eng} type={'text'} onChange={(e)=>{setWord(state => ({...state, eng: e.target.value}))}}/>
+                <input name="rus" className="str__3 border-2" value={word.rus} type={'text'} onChange={(e)=>{setWord(state => ({...state, rus: e.target.value}))}}/>
                 <div className="str__4">
                     {allGroups.map((group: Group, i) => {
                         return (

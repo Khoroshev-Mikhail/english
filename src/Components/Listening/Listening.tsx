@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
+import { setVocabulary } from "../../API/API"
 import { randomWord } from "../../store/myFns"
 import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
 
@@ -20,17 +21,9 @@ export default function Listening(props: Group){
             setTimeout(()=>{
                 e.target.value = ''
                 e.target.disabled = false
-                new Promise((resolve, reject) => {
-                    resolve(fetch('http://localhost:3001/setVocabulary', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        }, 
-                        body: JSON.stringify({method: 'listening', idWord: random.id})
-                    }))
-                })
+                setVocabulary(1, 'listening', random.id)
                 .then(result => {
-                    dispatch(vocabularThunk())
+                    dispatch(vocabularThunk(1))
                 }, error => {console.log('errorrrr')})
             },1000)
         }

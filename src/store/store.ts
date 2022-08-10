@@ -1,9 +1,7 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from '@reduxjs/toolkit'
 
-export type Word = {
-    id: number, eng: string, rus: string, groups: string[],
-}
+export type Word = {id: number, eng: string, rus: string, groups: string[]}
+//Хранить здесь json файлы с initial dictionary и перезаписывать их каждый раз после обновления dictionary
 export const dictionary: Word[] = [
     {id: 0, eng: 'air', rus: 'воздух', groups: ['nouns']},
     {id: 1, eng: 'animal', rus: 'животное', groups: ['nouns']},
@@ -17,27 +15,24 @@ export const dictionary: Word[] = [
     {id: 98, eng: 'year', rus: 'год', groups: ['adjectives']},
     {id: 99, eng: 'example', rus: 'пример', groups: ['adjectives']},
 ]
-
 export const dictionaryThunk = createAsyncThunk(
     'dictionaryThunk',
-    async function() /*: Word[] ??????*/{
-        const response = await fetch('http://localhost:3001/dictionary')
+    async function() {
+        const response = await fetch('http://localhost:3001/dictionary', {
+            method: 'POST'
+        })
         const data: Word[] = await response.json()
-        return data.sort((a:any, b:any) => a.eng.localeCompare(b.eng))
+        return data.sort((a: Word, b: Word) => a.eng.localeCompare(b.eng))
     }
 )
 const dictionarySlice = createSlice({
     name: 'dictionarySlice',
     initialState: dictionary,
-    reducers: {
-        setDictionary: (state: any /*: Word[] ???????????*/, action: PayloadAction<number>) => [...state, action.payload]
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(dictionaryThunk.fulfilled, (state, action) => action.payload)
-        //builder.addCase(dictionaryThunk.rejected, (state, action) => dictionary) //что указать в ошибке?
+        builder.addCase(dictionaryThunk.fulfilled, (state: Word[], action) => action.payload)
     }
 })
-export const { setDictionary } = dictionarySlice.actions
 
 export type UsersVocabulary = {
     userId: number,
@@ -48,8 +43,6 @@ export type UsersVocabulary = {
     listening: number[] //Как указать пустой массив?
 }
 const userVocabulary = {
-    userId: 1, //удалить потом
-    userName: 'Mike', //удалить потом
     russianToEnglish: [ 1, 2, 3, 4, 5],
     englishToRussian: [ 1, 2, 3, 4, 5],
     spell: [ 1, 2, 3, 4, 5],
@@ -58,10 +51,22 @@ const userVocabulary = {
 
 export const vocabularThunk = createAsyncThunk(
     'vocabularThunk',
-    async function(){
-        const response = await fetch('http://localhost:3001/vocabulary')
-        const data = await response.json() //очистить от userId и др
-        return data
+    async function(id: number){
+        const response = await fetch('http://localhost:3001/vocabulary', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }, 
+            body: JSON.stringify({id})
+        })
+        const data = await response.json()
+        const filtredData = {
+            russianToEnglish: data.russianToEnglish,
+            englishToRussian: data.englishToRussian,
+            spell: data.spell,
+            listening: data.listening
+        }
+        return filtredData
     }
 )
 export const vocabularSlice = createSlice({
@@ -79,9 +84,11 @@ const groups: Group[] = [{id: 0, eng: 'nouns', title: 'Топ-100 существ
 export const groupsThunk = createAsyncThunk(
     'groups',
     async function(){
-        const response = await fetch('http://localhost:3001/groups')
+        const response = await fetch('http://localhost:3001/groups', {
+            method: 'POST'
+        })
         const data: Group[] = await response.json()
-        return data
+        return data.sort((a: Group, b: Group) => a.id - b.id)
     }
 )
 export const groupsSlice = createSlice({
@@ -93,7 +100,19 @@ export const groupsSlice = createSlice({
     }
 })
 
-
+//Написать авторизацию
+const authorizationThunk = createAsyncThunk(
+    'authorizationThunk',
+    async function(login, password){
+        const response = await fetch('http://localhost:3001/authorization', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }, 
+            body: JSON.stringify({login, password})
+        })
+    }
+)
 
 
 export const store = configureStore({

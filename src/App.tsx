@@ -7,7 +7,7 @@ function App() {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(()=>{
     dispatch(dictionaryThunk())
-    dispatch(vocabularThunk())
+    dispatch(vocabularThunk(1))
     dispatch(groupsThunk())
   }, [])
   return (
