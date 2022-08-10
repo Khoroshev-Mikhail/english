@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { randomWord, wordForSpell } from "../../store/myFns"
-import { AppDispatch, RootState, vocabularThunk, Word } from "../../store/store"
+import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
 import './Spell.css'
 
-export default function Spell(props: {group: string}){
+export default function Spell(props: Group){
     const dispatch = useDispatch<AppDispatch>()
-    const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
+    const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const lerned = useSelector((state: any) => state.userVocabulary.spell)
     
+    //Добавить решение на случай когда выучены все слова
+
+
     //ЗАЦИКЛИВАЕТСЯ. почему?
     //const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.spell))
     //
@@ -17,6 +20,7 @@ export default function Spell(props: {group: string}){
     const [answer, setAnswer] = useState<string[ ]>([])
 
     const [wordBySpell, setWordBySpell] = useState(wordForSpell(random.eng)) //для статичного расположение букв при обратном клике
+    
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
     function tryIt(e: any){
         setAnswer(answer => answer.concat(e.target.value))
@@ -28,7 +32,6 @@ export default function Spell(props: {group: string}){
     }
     //Или как сделать чтобы работало синхронно в функции tryIt?
     useEffect(()=>{
-        console.log('useEffect [ANSWER]')
         if(answer.map(el => el[1]).join('') === random.eng && random.eng.length > 0){
             audio.play()
             setTimeout(()=>{
@@ -50,7 +53,6 @@ export default function Spell(props: {group: string}){
         }
     }, [answer])
     useEffect(()=>{
-        console.log('useEffect [RANDOM]')
         setWordBySpell(wordForSpell(random.eng))
     }, [random])
     return(

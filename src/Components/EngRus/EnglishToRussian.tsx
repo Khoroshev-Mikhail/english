@@ -1,18 +1,23 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { falseVariants, randomWord } from "../../store/myFns"
-import { AppDispatch, RootState, vocabularThunk, Word } from "../../store/store"
+import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
 
-export default function EnglishToRussian(props: { group: string }){
+export default function EnglishToRussian(props: Group){
     const dispatch = useDispatch<AppDispatch>()
-    const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.group)))
+    const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.englishToRussian))
     const [tryAgain, setTryAgain] = useState(true) //Или как вызвать перерендер компонента при неправильном ответе?
+    if(!random){
+        return <h1>Congrats! Все слова изучены!</h1>
+    }
     let variants = falseVariants(wordsByGroup, random)
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
-    audio.play()
+    audio.play()   
+
     function tryIt(e: any){
         if(e.target.value === random.eng){
+            e.target.classList.add('bg-green-500')
             audio.play()
             setTimeout(()=>{
                 new Promise((resolve, reject) => {
@@ -25,34 +30,35 @@ export default function EnglishToRussian(props: { group: string }){
                     }))
                 })
                 .then(result => {
+                    e.target.classList.remove('bg-green-500')
                     dispatch(vocabularThunk())
                 }, error => {console.log('errorrrr')})
             }, 1000)
         } else {
-            setTryAgain(!tryAgain)
+            e.target.classList.add('bg-red-500')
+            setTimeout(()=>{
+                e.target.classList.remove('bg-red-500')
+                setTryAgain(!tryAgain)
+            }, 1000)
         }
     }
-    if(!random){
-        return <h1>Congrats! Все слова изучены!</h1>
-    }
+
     return (
-        <div className="RusEng">
-            <h1>{random.eng}</h1>
-            <div className="RusEng__Variants">
-                {variants.map(el => {
-                    return (
-                        <button
-                            className="RusEng__Variants__Variant"
-                            key={el.id}
-                            id={el.id.toString()}
-                            value={el.eng}
-                            onClick={tryIt}
-                            > 
-                            {el.rus}
-                        </button>
-                        )
-                })}
-            </div>
+        <div className="flex flex-col gap-2">
+            <button className="w-64 m-auto" disabled={true}>{random.eng}</button>
+            {variants.map(el => {
+                return (
+                    <button
+                        className="w-64 border-solid border-2 rounded-lg border-sky-500 m-auto"
+                        key={el.id}
+                        id={el.id.toString()}
+                        value={el.eng}
+                        onClick={tryIt}
+                        > 
+                        {el.rus}
+                    </button>
+                    )
+            })}
         </div>
     )
 }

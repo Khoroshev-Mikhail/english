@@ -8,7 +8,7 @@ export default function AddNewGroup(){
     const [eng, setEng] = useState<string>('')
     const [title, setTitle] = useState<string>('')
     const allGroups = useSelector((state: RootState) => state.groups)
-    const nextId = Math.max(...allGroups.map(el => el.id)) + 1
+    const nextId = Math.max(...allGroups.map(el => el.id)) + 1 //Не работает после первого добавления
     function handlerSubmit(e: any){
         e.preventDefault()
         new Promise((resolve, reject) => {

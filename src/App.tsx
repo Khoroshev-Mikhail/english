@@ -11,7 +11,7 @@ function App() {
     dispatch(groupsThunk())
   }, [])
   return (
-    <div className="text-3xl font-bold underline">
+    <div className="text-3xl font-bold no-underline">
       <Main />
     </div>
   );
