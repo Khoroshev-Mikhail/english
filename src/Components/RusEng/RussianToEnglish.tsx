@@ -6,6 +6,7 @@ import { AppDispatch, RootState, Word, vocabularThunk, Group } from "../../store
 
 export default function RussianToEnglish(props: Group){
     const dispatch: AppDispatch = useDispatch()
+    const userId = useSelector((state: RootState) => state.userData.userId)
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.russianToEnglish))
     const [tryAgain, setTryAgain] = useState<boolean>(true) //Для перерисовки неправильного ответа
@@ -24,7 +25,7 @@ export default function RussianToEnglish(props: Group){
                 setVocabulary(1, 'russianToEnglish', random.id)
                 .then(result => {
                     e.target.classList.remove('bg-green-500')
-                    dispatch(vocabularThunk(1))
+                    dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})
             }, 1000)
         } else {

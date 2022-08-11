@@ -1,18 +1,8 @@
-import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type Word = {id: number, eng: string, rus: string, groups: string[]}
 export const dictionary: Word[] = [
     {id: 0, eng: 'air', rus: 'воздух', groups: ['nouns']},
-    {id: 1, eng: 'animal', rus: 'животное', groups: ['nouns']},
-    {id: 2, eng: 'answer', rus: 'ответ', groups: ['nouns']},
-    {id: 10, eng: 'car', rus: 'машина', groups: ['nouns']},
-    {id: 11, eng: 'child', rus: 'ребёнок', groups: ['nouns']},
-    {id: 12, eng: 'children', rus: 'дети', groups: ['nouns']},
-    {id: 95, eng: 'wood', rus: 'дерево', groups: ['nouns']},
-    {id: 96, eng: 'word', rus: 'слово', groups: ['adjectives']},
-    {id: 97, eng: 'world', rus: 'мир', groups: ['adjectives']},
-    {id: 98, eng: 'year', rus: 'год', groups: ['adjectives']},
-    {id: 99, eng: 'example', rus: 'пример', groups: ['adjectives']},
 ]
 export const dictionaryThunk = createAsyncThunk(
     'dictionaryThunk',
@@ -34,23 +24,21 @@ const dictionarySlice = createSlice({
 })
 
 export type UsersVocabulary = {
-    userId: number,
-    userName: string,
     russianToEnglish: number[],
     englishToRussian: number[],
     spell: number[],
-    listening: number[] //Как указать пустой массив?
+    listening: number[],
 }
-const userVocabulary = {
-    russianToEnglish: [0], //Надо указать Пустой массив
-    englishToRussian: [0], //Надо указать Пустой массив
-    spell: [0], //Надо указать Пустой массив
-    listening: [0] //Надо указать Пустой массив
+const initialUserVocabulary: UsersVocabulary = {
+    russianToEnglish: [],
+    englishToRussian: [],
+    spell: [],
+    listening: []
 }
 
 export const vocabularThunk = createAsyncThunk(
     'vocabularThunk',
-    async function(id: number){
+    async function(id: number | null){
         const response = await fetch('http://localhost:3001/vocabulary', {
             method: "POST",
             headers: {
@@ -70,13 +58,20 @@ export const vocabularThunk = createAsyncThunk(
 )
 export const vocabularSlice = createSlice({
     name: 'usersVocabular',
-    initialState: userVocabulary,
-    reducers: {},
+    initialState: initialUserVocabulary,
+    reducers: {
+        clearVocabular: () => initialUserVocabulary,
+        setEnglishToRussian: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, englishToRussian: [...state.englishToRussian, action.payload]}),
+        setRussianToEnglish: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, russianToEnglish: [...state.russianToEnglish, action.payload]}),
+        setSpell: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, spell: [...state.spell, action.payload]}),
+        setListening: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, listening: [...state.listening, action.payload]}),
+    },
     extraReducers: (builder) => {
         builder.addCase(vocabularThunk.fulfilled, (_, action) => action.payload)
+        builder.addCase(vocabularThunk.rejected, () => initialUserVocabulary)
     }
 })
-
+export const {clearVocabular, setEnglishToRussian, setRussianToEnglish, setSpell, setListening} = vocabularSlice.actions
 
 export type Group = {id: number, eng: string, title: string}
 const groups: Group[] = [{id: 0, eng: 'nouns', title: 'Топ-100 существительных'}]
@@ -99,17 +94,16 @@ export const groupsSlice = createSlice({
     }
 })
 
-
 export type User = {
-    userId: number,
+    userId: number | null,
     login: string,
     pwd: string,
     name: string,
     phone: string,
     email: string,
 }
-const defaultUser: User = {
-    userId: 0,
+const initialUser: User = {
+    userId: null,
     login: 'unknown',
     pwd: '',
     name: 'unknown user',
@@ -127,27 +121,37 @@ export const authorizationThunk = createAsyncThunk(
             }, 
             body: JSON.stringify({login: obj.login, pwd: obj.pwd})
         })
-        const data = await response.json()
+        const data: User = await response.json()
         return data
     }
 )
 const authorizationSlice = createSlice({
     name: 'authorizationSlice',
-    initialState: defaultUser,
-    reducers: {},
+    initialState: initialUser,
+    reducers: {
+        clearAuthorization: () => initialUser
+    },
     extraReducers: (builder) => {
         builder.addCase(authorizationThunk.fulfilled, (_, action) => action.payload)
-        builder.addCase(authorizationThunk.rejected, (_, action) => defaultUser)
+        builder.addCase(authorizationThunk.rejected, () => initialUser)
     }
-
 })
+export const { clearAuthorization } = authorizationSlice.actions
 
-
-const myMiddleWare = (store: any) => (next: any) => (action: any) => {
+const localStorageMW = (store: any) => (next: any) => (action: any) => {
     const result = next(action)
     if(action.type == 'authorizationThunk/fulfilled'){
-        console.log('fullfiled', store.getState().userData)
-        //Как записать User в локалсторейдж если в этот момент
+        //может циклом for
+        const {userId, login, pwd, name, phone, email} = store.getState().userData
+        localStorage.setItem('userId', userId)
+        localStorage.setItem('login', login)
+        localStorage.setItem('pwd', pwd)
+        localStorage.setItem('name', name)
+        localStorage.setItem('phone', phone)
+        localStorage.setItem('email', email)
+    } 
+    if(action.type == 'authorizationThunk/rejected'){
+        localStorage.clear()
     }
     return result
 }
@@ -159,7 +163,7 @@ export const store = configureStore({
         groups: groupsSlice.reducer,
         userData: authorizationSlice.reducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(myMiddleWare),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMW),
 })
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

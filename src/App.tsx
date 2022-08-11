@@ -6,12 +6,16 @@ import { AppDispatch, dictionaryThunk, groupsThunk, RootState, vocabularThunk } 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
   const userId = useSelector((state: RootState) => state.userData.userId)
+  const localUserId = localStorage.getItem('userId')
   useEffect(()=>{
     dispatch(dictionaryThunk())
     dispatch(groupsThunk())
   }, [])
   useEffect(()=>{
-    dispatch(vocabularThunk(userId))
+    if(localUserId){
+      //Добавить проверку по pwd
+      dispatch(vocabularThunk(Number(localUserId)))
+    }
 }, [userId])
 
 

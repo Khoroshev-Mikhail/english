@@ -7,6 +7,7 @@ import './Spell.css'
 
 export default function Spell(props: Group){
     const dispatch = useDispatch<AppDispatch>()
+    const userId = useSelector((state: RootState) => state.userData.userId)
     const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const lerned = useSelector((state: any) => state.userVocabulary.spell)
     
@@ -38,7 +39,7 @@ export default function Spell(props: Group){
             setTimeout(()=>{
                 setVocabulary(1, 'spell', random.id)
                 .then(result => {
-                    dispatch(vocabularThunk(1))
+                    dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})
                 setAnswer([])
                 setRandom(randomWord(wordsByGroup, lerned))

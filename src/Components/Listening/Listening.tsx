@@ -7,6 +7,7 @@ export default function Listening(props: Group){
     //Добавить автофокус
     //Добавить баттон nextWord (на случай если пользователь не сможет угадать)
     const dispatch: AppDispatch = useDispatch()
+    const userId = useSelector((state: RootState) => state.userData.userId)
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.russianToEnglish))
     const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`)
@@ -23,7 +24,7 @@ export default function Listening(props: Group){
                 e.target.disabled = false
                 setVocabulary(1, 'listening', random.id)
                 .then(result => {
-                    dispatch(vocabularThunk(1))
+                    dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})
             },1000)
         }

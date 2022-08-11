@@ -6,6 +6,7 @@ import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store
 
 export default function EnglishToRussian(props: Group){
     const dispatch = useDispatch<AppDispatch>()
+    const userId = useSelector((state: RootState) => state.userData.userId)
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.englishToRussian))
     const [tryAgain, setTryAgain] = useState(true) //Или как вызвать перерендер компонента при неправильном ответе?
@@ -25,7 +26,7 @@ export default function EnglishToRussian(props: Group){
                 .then(
                     () => {
                         e.target.classList.remove('bg-green-500') //Через стейт
-                        dispatch(vocabularThunk(1))
+                        dispatch(vocabularThunk(userId))
                     },
                     () => {console.log('errorrrr')}
                 )
