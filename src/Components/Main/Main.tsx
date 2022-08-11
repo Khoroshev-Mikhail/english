@@ -15,27 +15,27 @@ import ChangeGroup from "../Admin/ChangeGroup/ChangeGroup";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import React, { useId } from "react";
+import Login from "../Authorization/Login";
 
 
 export default function Main(){
     const allGroups = useSelector((state: RootState) => state.groups)
     const id = useId()
     return (
-        <div className="container mx-auto px-4 text-sm font-sans">
+        <div>
                 <Header />
                 <Routes>
-                    <Route path="/" element={<GroupsOfWords/>} />
+                    <Route path="/" element={<GroupsOfWords />} />
+                    <Route path="/Login" element={<Login />} /> {/**Добавить редирект при успешной авторизации */}
 
-                    
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/addNewWord" element={<AddNewWord />} />
                     <Route path="/changeWord" element={<ChangeWord />} />
                     <Route path="/addNewGroup" element={<AddNewGroup />} />
                     <Route path="/changeGroup" element={<ChangeGroup />} />
-
                     {allGroups.map((el, i) => {
                         return (
-                            <React.Fragment key={id + i}>{/**Ругает на отстутствие key */} 
+                            <React.Fragment key={id + i}> 
                                 <Route path={el.eng} element={<OneGroupOfWords {...el} />} />
                                 <Route path={`${el.eng}/eng-rus`} element={<EnglishToRussian {...el} />} />
                                 <Route path={`${el.eng}/rus-eng`} element={<RussianToEnglish {...el} />} />
@@ -44,7 +44,6 @@ export default function Main(){
                             </React.Fragment>
                         )
                     })}
-
                 </Routes>
         </div>
     )

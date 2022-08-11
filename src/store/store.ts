@@ -1,7 +1,6 @@
 import { configureStore, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export type Word = {id: number, eng: string, rus: string, groups: string[]}
-//Хранить здесь json файлы с initial dictionary и перезаписывать их каждый раз после обновления dictionary
 export const dictionary: Word[] = [
     {id: 0, eng: 'air', rus: 'воздух', groups: ['nouns']},
     {id: 1, eng: 'animal', rus: 'животное', groups: ['nouns']},
@@ -30,7 +29,7 @@ const dictionarySlice = createSlice({
     initialState: dictionary,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(dictionaryThunk.fulfilled, (state: Word[], action) => action.payload)
+        builder.addCase(dictionaryThunk.fulfilled, (_, action) => action.payload)
     }
 })
 
@@ -43,10 +42,10 @@ export type UsersVocabulary = {
     listening: number[] //Как указать пустой массив?
 }
 const userVocabulary = {
-    russianToEnglish: [ 1, 2, 3, 4, 5],
-    englishToRussian: [ 1, 2, 3, 4, 5],
-    spell: [ 1, 2, 3, 4, 5],
-    listening: [1, 2]
+    russianToEnglish: [0], //Надо указать Пустой массив
+    englishToRussian: [0], //Надо указать Пустой массив
+    spell: [0], //Надо указать Пустой массив
+    listening: [0] //Надо указать Пустой массив
 }
 
 export const vocabularThunk = createAsyncThunk(
@@ -74,7 +73,7 @@ export const vocabularSlice = createSlice({
     initialState: userVocabulary,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(vocabularThunk.fulfilled, (state, action) => action.payload)
+        builder.addCase(vocabularThunk.fulfilled, (_, action) => action.payload)
     }
 })
 
@@ -96,31 +95,70 @@ export const groupsSlice = createSlice({
     initialState: groups,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(groupsThunk.fulfilled, (state, action) => action.payload)
+        builder.addCase(groupsThunk.fulfilled, (_, action) => action.payload)
     }
 })
 
-//Написать авторизацию
-const authorizationThunk = createAsyncThunk(
+
+export type User = {
+    userId: number,
+    login: string,
+    pwd: string,
+    name: string,
+    phone: string,
+    email: string,
+}
+const defaultUser: User = {
+    userId: 0,
+    login: 'unknown',
+    pwd: '',
+    name: 'unknown user',
+    phone: 'unknown',
+    email: 'unknown'
+}
+//Добавить логику: Если неавторизированный пользователь изучал слова, а потом авторизировался то надо засетать изученный стейт в словарь пользователя
+export const authorizationThunk = createAsyncThunk(
     'authorizationThunk',
-    async function(login, password){
+    async function (obj: {login: string, pwd: string}){ //Не указывается тип пароля
         const response = await fetch('http://localhost:3001/authorization', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }, 
-            body: JSON.stringify({login, password})
+            body: JSON.stringify({login: obj.login, pwd: obj.pwd})
         })
+        const data = await response.json()
+        return data
     }
 )
+const authorizationSlice = createSlice({
+    name: 'authorizationSlice',
+    initialState: defaultUser,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(authorizationThunk.fulfilled, (_, action) => action.payload)
+        builder.addCase(authorizationThunk.rejected, (_, action) => defaultUser)
+    }
 
+})
+
+
+const myMiddleWare = (store: any) => (next: any) => (action: any) => {
+    const result = next(action)
+    if(action.type == 'authorizationThunk/fulfilled'){
+        console.log('fullfiled', store.getState().userData)
+    }
+    return result
+}
 
 export const store = configureStore({
     reducer: {
         userVocabulary: vocabularSlice.reducer,
         dictionary: dictionarySlice.reducer,
         groups: groupsSlice.reducer,
-    }
+        userData: authorizationSlice.reducer
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(myMiddleWare),
 })
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

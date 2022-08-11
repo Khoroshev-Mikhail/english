@@ -1,17 +1,22 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import Main from "./Components/Main/Main";
-import { AppDispatch, dictionaryThunk, groupsThunk, vocabularThunk } from "./store/store";
+import { AppDispatch, dictionaryThunk, groupsThunk, RootState, vocabularThunk } from "./store/store";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
+  const userId = useSelector((state: RootState) => state.userData.userId)
   useEffect(()=>{
     dispatch(dictionaryThunk())
-    dispatch(vocabularThunk(1))
     dispatch(groupsThunk())
   }, [])
+  useEffect(()=>{
+    dispatch(vocabularThunk(userId))
+}, [userId])
+
+
   return (
-    <div className="text-3xl font-bold no-underline">
+    <div className="container mx-auto px-4 text-sm font-sans">
       <Main />
     </div>
   );
