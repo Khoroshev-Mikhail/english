@@ -147,6 +147,7 @@ const myMiddleWare = (store: any) => (next: any) => (action: any) => {
     const result = next(action)
     if(action.type == 'authorizationThunk/fulfilled'){
         console.log('fullfiled', store.getState().userData)
+        //Как записать User в локалсторейдж если в этот момент
     }
     return result
 }
