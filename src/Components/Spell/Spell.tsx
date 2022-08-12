@@ -37,7 +37,7 @@ export default function Spell(props: Group){
         if(answer.map(el => el[1]).join('') === random.eng && random.eng.length > 0){
             audio.play()
             setTimeout(()=>{
-                setVocabulary(1, 'spell', random.id)
+                setVocabulary(userId, 'spell', random.id)
                 .then(result => {
                     dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})

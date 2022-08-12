@@ -57,10 +57,11 @@ export const vocabularThunk = createAsyncThunk(
     }
 )
 export const vocabularSlice = createSlice({
-    name: 'usersVocabular',
+    name: 'userVocabulary',
     initialState: initialUserVocabulary,
     reducers: {
         clearVocabular: () => initialUserVocabulary,
+        setTotalVocabulary: (_, action) => action.payload,
         setEnglishToRussian: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, englishToRussian: [...state.englishToRussian, action.payload]}),
         setRussianToEnglish: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, russianToEnglish: [...state.russianToEnglish, action.payload]}),
         setSpell: (state: UsersVocabulary, action: PayloadAction<number>) => ({...state, spell: [...state.spell, action.payload]}),
@@ -71,7 +72,7 @@ export const vocabularSlice = createSlice({
         builder.addCase(vocabularThunk.rejected, () => initialUserVocabulary)
     }
 })
-export const {clearVocabular, setEnglishToRussian, setRussianToEnglish, setSpell, setListening} = vocabularSlice.actions
+export const {clearVocabular, setTotalVocabulary, setEnglishToRussian, setRussianToEnglish, setSpell, setListening} = vocabularSlice.actions
 
 export type Group = {id: number, eng: string, title: string}
 const groups: Group[] = [{id: 0, eng: 'nouns', title: 'Топ-100 существительных'}]
@@ -129,26 +130,23 @@ const authorizationSlice = createSlice({
     name: 'authorizationSlice',
     initialState: initialUser,
     reducers: {
-        clearAuthorization: () => initialUser
+        clearAuthorization: () => initialUser,
+        authorizationAction: (_, action) => action.payload
     },
     extraReducers: (builder) => {
         builder.addCase(authorizationThunk.fulfilled, (_, action) => action.payload)
         builder.addCase(authorizationThunk.rejected, () => initialUser)
     }
 })
-export const { clearAuthorization } = authorizationSlice.actions
+export const { clearAuthorization, authorizationAction } = authorizationSlice.actions
 
 const localStorageMW = (store: any) => (next: any) => (action: any) => {
+    //console.log(store.getState().userData)
+    //console.log(action.type)
     const result = next(action)
     if(action.type == 'authorizationThunk/fulfilled'){
-        //может циклом for
-        const {userId, login, pwd, name, phone, email} = store.getState().userData
-        localStorage.setItem('userId', userId)
-        localStorage.setItem('login', login)
-        localStorage.setItem('pwd', pwd)
-        localStorage.setItem('name', name)
-        localStorage.setItem('phone', phone)
-        localStorage.setItem('email', email)
+        const localUserData = JSON.stringify(store.getState().userData)
+        localStorage.setItem('localUserData', localUserData)
     } 
     if(action.type == 'authorizationThunk/rejected'){
         localStorage.clear()

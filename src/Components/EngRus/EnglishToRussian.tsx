@@ -2,11 +2,12 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setVocabulary } from "../../API/API"
 import { falseVariants, randomWord } from "../../store/myFns"
-import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store/store"
+import { AppDispatch, Group, RootState, setEnglishToRussian, vocabularThunk, Word } from "../../store/store"
 
 export default function EnglishToRussian(props: Group){
     const dispatch = useDispatch<AppDispatch>()
     const userId = useSelector((state: RootState) => state.userData.userId)
+    const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.englishToRussian))
     const [tryAgain, setTryAgain] = useState(true) //Или как вызвать перерендер компонента при неправильном ответе?
@@ -22,7 +23,7 @@ export default function EnglishToRussian(props: Group){
             e.target.classList.add('bg-green-500') //Локальный
             audio.play()
             setTimeout(()=>{
-                setVocabulary(1, 'englishToRussian', random.id)
+                setVocabulary(userId, 'englishToRussian', random.id)
                 .then(
                     () => {
                         e.target.classList.remove('bg-green-500') //Через стейт
@@ -40,6 +41,11 @@ export default function EnglishToRussian(props: Group){
         }
     }
 
+    function tryItForUnknown(e: any){
+        dispatch(setEnglishToRussian(random.id))
+        const localUserVocabulary = JSON.stringify(userVocabulary)
+        localStorage.setItem('localUserVocabulary', localUserVocabulary)
+    }
     return (
         <div className="flex flex-col gap-2">
             <button className="w-64 m-auto" disabled={true}>{random.eng}</button>
@@ -50,7 +56,7 @@ export default function EnglishToRussian(props: Group){
                         key={el.id}
                         id={el.id.toString()}
                         value={el.eng}
-                        onClick={tryIt}
+                        onClick={userId ? tryIt : tryItForUnknown}
                         > 
                         {el.rus}
                     </button>

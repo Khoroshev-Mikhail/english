@@ -22,7 +22,7 @@ export default function Listening(props: Group){
             setTimeout(()=>{
                 e.target.value = ''
                 e.target.disabled = false
-                setVocabulary(1, 'listening', random.id)
+                setVocabulary(userId, 'listening', random.id)
                 .then(result => {
                     dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})

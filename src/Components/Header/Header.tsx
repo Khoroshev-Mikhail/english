@@ -6,7 +6,7 @@ export default function Header(){
     //Добавить хлебные крошки
     const dispatch = useDispatch<AppDispatch>()
     const isAdmin = useSelector((state: RootState) => state.userData.userId === 1 ? true : false)
-    const userId = localStorage.getItem('userId')
+    const userId = useSelector((state: RootState) => state.userData.userId)
     
     function exit(){
         localStorage.clear()

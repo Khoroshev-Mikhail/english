@@ -5,7 +5,7 @@ export async function authorization(id: number, pwd: string){
         body: JSON.stringify({id, pwd})
     })
 }
-export function setVocabulary(userId: number, method: string, idWord: number){
+export function setVocabulary(userId: number | null, method: string, idWord: number){
     return fetch('http://localhost:3001/setVocabulary', {
             method: 'POST',
             headers: {

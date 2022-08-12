@@ -22,7 +22,7 @@ export default function RussianToEnglish(props: Group){
             e.target.classList.add('bg-green-500')
             audio.play()
             setTimeout(()=>{
-                setVocabulary(1, 'russianToEnglish', random.id)
+                setVocabulary(userId, 'russianToEnglish', random.id)
                 .then(result => {
                     e.target.classList.remove('bg-green-500')
                     dispatch(vocabularThunk(userId))
