@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, clearAuthorization, clearVocabular, RootState } from "../../store/store";
 import AdminNav from "../Admin/AdminNav/AdminNav";
+import UserAdminNav from "../Admin/UserAdminNav/UserAdminNav";
 export default function Header(){
     //Добавить хлебные крошки
     const dispatch = useDispatch<AppDispatch>()
@@ -17,9 +18,11 @@ export default function Header(){
     return (
         <>
             {isAdmin && <AdminNav /> /*надо вывести в глобальную переменную*/}
+            {userId && <UserAdminNav />}
             <header className="flex flex-row flex-wrap justify-start gap-4 py-1">
                 <Link to={'/'} className="sm:text-center w-full sm:w-auto underline text-sky-500"> Слова </Link>
                 <span>Адаптированные тексты</span>
+                <span>Адаптированные видео</span>
                 {userId ? exitButton : 
                 <Link to={'/Login'} className="sm:text-center w-full sm:w-auto underline text-sky-500">
                     Вход / Регистрация

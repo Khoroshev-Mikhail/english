@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setVocabulary } from "../../API/API"
 import { falseVariants, randomWord } from "../../store/myFns"
@@ -6,11 +6,19 @@ import { AppDispatch, Group, RootState, setEnglishToRussian, vocabularThunk, Wor
 
 export default function EnglishToRussian(props: Group){
     const dispatch = useDispatch<AppDispatch>()
+
     const userId = useSelector((state: RootState) => state.userData.userId)
     const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
     const wordsByGroup = useSelector((state: RootState) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.englishToRussian))
     const [tryAgain, setTryAgain] = useState(true) //Или как вызвать перерендер компонента при неправильном ответе?
+
+    useEffect(()=>{
+        if(!userId){
+            const localUserVocabulary = JSON.stringify(userVocabulary)
+            localStorage.setItem('localUserVocabulary', localUserVocabulary)
+        }
+    },[userVocabulary])
     if(!random){
         return <h1>Congrats! Все слова изучены!</h1>
     }
@@ -43,9 +51,10 @@ export default function EnglishToRussian(props: Group){
 
     function tryItForUnknown(e: any){
         dispatch(setEnglishToRussian(random.id))
-        const localUserVocabulary = JSON.stringify(userVocabulary)
-        localStorage.setItem('localUserVocabulary', localUserVocabulary)
     }
+
+
+
     return (
         <div className="flex flex-col gap-2">
             <button className="w-64 m-auto" disabled={true}>{random.eng}</button>

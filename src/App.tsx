@@ -10,14 +10,18 @@ function App() {
   useEffect(()=>{
     dispatch(dictionaryThunk())
     dispatch(groupsThunk())
+
+
+    //Каждый раз при запуске сетать авторизированного юзера
     const localUserData = localStorage.getItem('localUserData')
     if(localUserData){
       dispatch(authorizationAction(JSON.parse(localUserData)))
     }
+    
+    //Сохраняю учебный прогресс не авторизированного пользователя
     const localUserVocabulary = localStorage.getItem('localUserVocabulary')
     if(localUserVocabulary){
-      console.log(localUserVocabulary)
-      //dispatch(setTotalVocabulary(JSON.parse(localUserVocabulary)))
+      dispatch(setTotalVocabulary(JSON.parse(localUserVocabulary)))
     }
   }, [])
   useEffect(()=>{
