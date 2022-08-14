@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import React, { useId } from "react";
 import Login from "../Authorization/Login";
+import Sencha from "../Admin/SenchaTest/Sencha";
 
 
 export default function Main(){
@@ -26,7 +27,9 @@ export default function Main(){
                 <Header />
                 <Routes>
                     <Route path="/" element={<GroupsOfWords />} />
+                    <Route path="/test" element={<Sencha />} />
                     <Route path="/Login" element={<Login />} /> {/**Добавить редирект при успешной авторизации */}
+
 
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/addNewWord" element={<AddNewWord />} />

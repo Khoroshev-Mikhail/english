@@ -2,15 +2,13 @@ import { useId } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { RootState } from "../../store/store"
-import './GroupsOfWords.css'
-
 export default function GroupsOfWords(){
     const allGroups = useSelector((state: RootState) => state.groups)
     const userVocabulary = useSelector((state: RootState) => state.userVocabulary)
     const dictionary = useSelector((state: RootState) => state.dictionary)
     const id = useId()
-    //Добавить новую компоненту
-    //Не ренедерятся значения после сетанья
+    //Добавить новую компоненту    
+
     return (
         <div className="flex gap-5 flex-wrap justify-between sm:justify-start">
             {allGroups.map((group: any, i) => {

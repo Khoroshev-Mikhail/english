@@ -21,6 +21,7 @@ export default function Header(){
             {userId && <UserAdminNav />}
             <header className="flex flex-row flex-wrap justify-start gap-4 py-1">
                 <Link to={'/'} className="sm:text-center w-full sm:w-auto underline text-sky-500"> Слова </Link>
+                <Link to={'/test'} className="sm:text-center w-full sm:w-auto underline text-sky-500"> test </Link>
                 <span>Адаптированные тексты</span>
                 <span>Адаптированные видео</span>
                 <span>Диалоги</span>

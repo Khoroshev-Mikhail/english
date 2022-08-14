@@ -60,6 +60,7 @@ export default function UpdateWordForm(props: {id: number}){
             console.log('error in Delete Word', error.message)
         })
     }
+
     return(
         <div className="">
             <form onSubmit={handerlForm}>
@@ -92,5 +93,6 @@ export default function UpdateWordForm(props: {id: number}){
                 <button type="button" onClick={deleteWord}>delete</button>
                 </form>
         </div>
+        
     )
 }
