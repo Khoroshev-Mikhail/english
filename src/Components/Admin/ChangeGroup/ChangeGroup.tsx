@@ -1,12 +1,15 @@
 import { useId } from "react"
 import { useSelector } from "react-redux"
 import { Group, RootState } from "../../../store/store"
-import './ChangeGroup.css'
 import UpdateGroupForm from "./UpdateGroupForm"
 
 export default function ChangeGroup(){
+    //Глобальное состояние
     const allGroups = useSelector((state: RootState) => state.groups)
+
+    //Переменные для рендеринга
     const id = useId()
+    
     return (
         <div className="globalTableWords">
             <div className="topbar">

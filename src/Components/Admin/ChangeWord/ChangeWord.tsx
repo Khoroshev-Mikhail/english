@@ -1,7 +1,6 @@
 import { useId } from "react"
 import { useSelector } from "react-redux"
 import { RootState, Word } from "../../../store/store"
-import './ChangeWord.css'
 import UpdateWordForm from "./UpdateWordForm"
 
 export default function ChangeWord(){

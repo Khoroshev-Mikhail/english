@@ -6,38 +6,29 @@ import { AppDispatch, Group, RootState, vocabularThunk, Word } from "../../store
 import './Spell.css'
 
 export default function Spell(props: Group){
+    //Глобальные методы
     const dispatch = useDispatch<AppDispatch>()
-    const userId = useSelector((state: RootState) => state.userData.userId)
+
+    //Глобальное состояние
+    const { userId, pwd } = useSelector((state: RootState) => state.userData)
     const wordsByGroup = useSelector((state:any) => state.dictionary.filter((el: Word) => el.groups.includes(props.eng)))
     const lerned = useSelector((state: any) => state.userVocabulary.spell)
-    
-    //Добавить решение на случай когда выучены все слова
 
-
-    //ЗАЦИКЛИВАЕТСЯ. почему?
-    //const random = useSelector((state: RootState) => randomWord(wordsByGroup, state.userVocabulary.spell))
-    //
-
+    //Локальное состояние
     const [random, setRandom] = useState<Word>(randomWord(wordsByGroup, lerned))
     const [answer, setAnswer] = useState<string[ ]>([])
-
     const [wordBySpell, setWordBySpell] = useState(wordForSpell(random.eng)) //для статичного расположение букв при обратном клике
     
-    const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
-    function tryIt(e: any){
-        setAnswer(answer => answer.concat(e.target.value))
-        setWordBySpell(wordBySpell => wordBySpell.filter(letter => letter !== e.target.value))
-    }
-    function backLetter(e: any){
-        setWordBySpell(wordBySpell => wordBySpell.concat(e.target.value))
-        setAnswer(answer => answer.filter(letter => letter !== e.target.value))
-    }
-    //Или как сделать чтобы работало синхронно в функции tryIt?
+    //Эффекты
+    useEffect(()=>{//Или как сделать чтобы работало синхронно в функции tryIt?
+        setWordBySpell(wordForSpell(random.eng))
+    }, [random])
+
     useEffect(()=>{
         if(answer.map(el => el[1]).join('') === random.eng && random.eng.length > 0){
             audio.play()
             setTimeout(()=>{
-                setVocabulary(userId, 'spell', random.id)
+                setVocabulary(userId, pwd, 'spell', random.id)
                 .then(result => {
                     dispatch(vocabularThunk(userId))
                 }, error => {console.log('errorrrr')})
@@ -46,9 +37,19 @@ export default function Spell(props: Group){
             }, 1000)
         }
     }, [answer])
-    useEffect(()=>{
-        setWordBySpell(wordForSpell(random.eng))
-    }, [random])
+    //Переменные для рендеринга
+    const audio = new Audio(`/Audio/nouns/${random.eng}.mp3`) //В идеале парсить аудио с гугл/Яндекс-переводчика или получать с какойнибудь API
+    
+    //Функции для рендоринга
+    function tryIt(e: any){
+        setAnswer(answer => answer.concat(e.target.value))
+        setWordBySpell(wordBySpell => wordBySpell.filter(letter => letter !== e.target.value))
+    }
+    function backLetter(e: any){
+        setWordBySpell(wordBySpell => wordBySpell.concat(e.target.value))
+        setAnswer(answer => answer.filter(letter => letter !== e.target.value))
+    }
+
     return(
         <div className="Spell">
             <h1>{random.rus}</h1>

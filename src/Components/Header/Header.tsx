@@ -23,6 +23,7 @@ export default function Header(){
                 <Link to={'/'} className="sm:text-center w-full sm:w-auto underline text-sky-500"> Слова </Link>
                 <span>Адаптированные тексты</span>
                 <span>Адаптированные видео</span>
+                <span>Диалоги</span>
                 {userId ? exitButton : 
                 <Link to={'/Login'} className="sm:text-center w-full sm:w-auto underline text-sky-500">
                     Вход / Регистрация

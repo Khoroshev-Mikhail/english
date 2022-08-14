@@ -6,15 +6,14 @@ import { AppDispatch, authorizationAction, dictionaryThunk, groupsThunk, RootSta
 function App() {
   const dispatch = useDispatch<AppDispatch>()
   const userId = useSelector((state: RootState) => state.userData.userId)
-  const localUserId = localStorage.getItem('userId')
   useEffect(()=>{
     dispatch(dictionaryThunk())
     dispatch(groupsThunk())
 
-
     //Каждый раз при запуске сетать авторизированного юзера
     const localUserData = localStorage.getItem('localUserData')
     if(localUserData){
+      //console.log(JSON.parse(localUserData))
       dispatch(authorizationAction(JSON.parse(localUserData)))
     }
     

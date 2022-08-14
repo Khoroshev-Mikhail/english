@@ -1,28 +1,38 @@
-import { useId, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, dictionaryThunk, groupsThunk, RootState } from "../../../store/store"
+import { AppDispatch, groupsThunk, RootState } from "../../../store/store"
 
 export default function AddNewGroup(){
+    //Глобальные методы
     const dispatch = useDispatch<AppDispatch>()
+
+    //Глобальное состояние
+    const {userId, pwd} = useSelector((state: RootState) => state.userData)
+    const allGroups = useSelector((state: RootState) => state.groups)
+
+    //Локальное состояние
     const [eng, setEng] = useState<string>('')
     const [title, setTitle] = useState<string>('')
-    const allGroups = useSelector((state: RootState) => state.groups)
+
+    //Переменные для рендеринга
     const nextId = Math.max(...allGroups.map(el => el.id)) + 1 
+
+    //Функции для рендеринга
     function handlerSubmit(e: any){
         e.preventDefault()
-        new Promise((resolve, reject) => {
-            resolve(fetch('http://localhost:3001/setGroups', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                }, 
-                body: JSON.stringify({eng, title})
-            }))
-        }).then(result => {
+        fetch('http://localhost:3001/setGroups', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }, 
+            body: JSON.stringify({userId, pwd, eng, title})
+        })
+        .then(result => {
+            console.log(result)
             setEng('')
             setTitle('')
             dispatch(groupsThunk())
-        }, error => {console.log('errorrrr')})
+        }, error => {console.log('error in the Add New Group', error.message)})
     }
     return (
         <div>
